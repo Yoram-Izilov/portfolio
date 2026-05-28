@@ -12,7 +12,12 @@ build/
 .output/
 .vercel/
 .netlify/
+.wrangler/
 .cache/
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
 
 # Environment (keep .env.example tracked)
 .env
