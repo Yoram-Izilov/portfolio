@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output (covers Astro / SvelteKit / Next / generic)
+dist/
+build/
+.astro/
+.svelte-kit/
+.next/
+.output/
+.vercel/
+.netlify/
+.cache/
+
+# Environment (keep .env.example tracked)
+.env
+.env.*
+!.env.example
+
+# Logs & debug
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Claude Code (keep the shared kit tracked; ignore local-only settings)
+.claude/settings.local.json
+
+# Note: lockfiles (package-lock.json) are intentionally committed — do NOT ignore them.

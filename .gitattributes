@@ -1,0 +1,5 @@
+# Normalize line endings; let git infer text vs binary.
+* text=auto
+
+# Shell scripts MUST stay LF so Git Bash can execute the .claude hooks on Windows.
+*.sh text eol=lf
