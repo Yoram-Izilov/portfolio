@@ -12,6 +12,7 @@ build
 # Tooling / meta not needed for the build
 .claude
 .vscode
+scripts
 *.md
 .env
 .env.*
