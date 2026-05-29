@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { gsap } from 'gsap';
+	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
+	import type { Pathname } from '$app/types';
 	import type { Project } from '$lib/data/projects';
 
 	let {
@@ -72,6 +74,17 @@
 		current = null;
 		onClose();
 	}
+
+	// Navigating to the case study while this modal <dialog> is still open leaves the
+	// page inert (frozen, unscrollable) until a reload — the dialog stays in the top
+	// layer through the client-side navigation. So close it first, then navigate.
+	// Modified/non-primary clicks fall through to the link's native behaviour (new tab).
+	function openCaseStudy(e: MouseEvent, href: Pathname) {
+		if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+		e.preventDefault();
+		finish();
+		goto(resolve(href));
+	}
 </script>
 
 <dialog
@@ -112,7 +125,11 @@
 
 			<div class="foot">
 				{#if current.caseStudy}
-					<a class="case-study mono" href={resolve(current.caseStudy)}>
+					<a
+						class="case-study mono"
+						href={resolve(current.caseStudy)}
+						onclick={(e) => current?.caseStudy && openCaseStudy(e, current.caseStudy)}
+					>
 						Read the case study<span class="arrow" aria-hidden="true">→</span>
 					</a>
 				{/if}
