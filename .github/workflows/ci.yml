@@ -3,8 +3,7 @@ name: CI
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
+  pull_request: # run on PRs into any base (supports stacked feature branches)
 
 permissions:
   contents: read
