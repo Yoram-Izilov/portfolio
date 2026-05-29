@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import PipelineGraph from '$lib/components/PipelineGraph.svelte';
 	import ProjectPanel from '$lib/components/ProjectPanel.svelte';
 	import ApproachPipeline from '$lib/components/ApproachPipeline.svelte';
@@ -6,6 +7,11 @@
 
 	let selectedId = $state<string | null>(null);
 	let originRect = $state<DOMRect | null>(null);
+
+	// 0..1 — drives the hero pipeline's scroll-run illumination.
+	// Starts dormant; reduced-motion / no-JS fall back to fully lit (see onMount).
+	let progress = $state(0);
+	let heroEl: HTMLElement;
 
 	const selected = $derived(projects.find((p) => p.id === selectedId) ?? null);
 
@@ -17,9 +23,44 @@
 	function handleClose() {
 		selectedId = null;
 	}
+
+	onMount(() => {
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			progress = 1;
+			return;
+		}
+
+		let st: { kill: () => void } | undefined;
+		let onLoad: (() => void) | undefined;
+		let cancelled = false;
+
+		import('gsap').then(async ({ gsap }) => {
+			const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+			if (cancelled || !heroEl) return;
+			gsap.registerPlugin(ScrollTrigger);
+			st = ScrollTrigger.create({
+				trigger: heroEl,
+				start: 'top top',
+				end: '+=120%',
+				pin: true,
+				pinSpacing: true,
+				scrub: 0.5,
+				onUpdate: (self: { progress: number }) => (progress = self.progress)
+			});
+			// fonts/late layout can shift pin math — recalc once everything has loaded
+			onLoad = () => ScrollTrigger.refresh();
+			window.addEventListener('load', onLoad);
+		});
+
+		return () => {
+			cancelled = true;
+			if (onLoad) window.removeEventListener('load', onLoad);
+			st?.kill();
+		};
+	});
 </script>
 
-<main class="hero">
+<main class="hero" bind:this={heroEl}>
 	<div class="hero-inner">
 		<header class="intro">
 			<p class="status mono"><span class="dot" aria-hidden="true"></span>OPERATIONAL</p>
@@ -32,9 +73,9 @@
 		</header>
 
 		<figure class="graph-wrap">
-			<PipelineGraph onSelect={handleSelect} activeId={selectedId} />
+			<PipelineGraph onSelect={handleSelect} activeId={selectedId} {progress} />
 			<figcaption class="caption mono">
-				click a project node to drill in — the system above is the site you're on
+				scroll to run the pipeline · click a project node to drill in
 			</figcaption>
 		</figure>
 	</div>
