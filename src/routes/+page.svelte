@@ -1,6 +1,7 @@
 <script lang="ts">
 	import PipelineGraph from '$lib/components/PipelineGraph.svelte';
 	import ProjectPanel from '$lib/components/ProjectPanel.svelte';
+	import ApproachPipeline from '$lib/components/ApproachPipeline.svelte';
 	import { projects } from '$lib/data/projects';
 
 	let selectedId = $state<string | null>(null);
@@ -38,6 +39,8 @@
 		</figure>
 	</div>
 </main>
+
+<ApproachPipeline />
 
 <ProjectPanel project={selected} {originRect} onClose={handleClose} />
 
