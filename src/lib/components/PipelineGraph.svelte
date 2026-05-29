@@ -2,7 +2,9 @@
 	import { projects } from '$lib/data/projects';
 
 	type Stage = { id: string; label: string; x: number };
-	type Edge = { id: string; d: string; dur: number; delay: number };
+	/** `at` = scroll progress at which this edge's packet becomes visible — matches its SOURCE
+	    stage lighting up, so flow leaves a stage the moment it goes active. */
+	type Edge = { id: string; d: string; dur: number; delay: number; at: number };
 
 	let {
 		onSelect,
@@ -40,21 +42,21 @@
 	const projH = 58;
 
 	const edges: Edge[] = [
-		{ id: 'e1', d: 'M170,80 L260,80', dur: 1.5, delay: 0 },
-		{ id: 'e2', d: 'M380,80 L470,80', dur: 1.5, delay: 0.5 },
-		{ id: 'e3', d: 'M590,80 L680,80', dur: 1.5, delay: 1.0 },
-		{ id: 'e4', d: 'M800,80 L860,80', dur: 1.2, delay: 1.5 },
-		{ id: 'e5', d: 'M740,103 C740,180 600,205 545,254', dur: 2.4, delay: 0.3 },
-		{ id: 'p1', d: 'M448,346 C448,405 250,392 250,441', dur: 2.6, delay: 0.2 },
-		{ id: 'p2', d: 'M500,346 L500,441', dur: 2.2, delay: 0.9 },
-		{ id: 'p3', d: 'M552,346 C552,405 750,392 750,441', dur: 2.6, delay: 1.4 }
+		{ id: 'e1', d: 'M170,80 L260,80', dur: 1.5, delay: 0, at: 0 },
+		{ id: 'e2', d: 'M380,80 L470,80', dur: 1.5, delay: 0.5, at: 0.15 },
+		{ id: 'e3', d: 'M590,80 L680,80', dur: 1.5, delay: 1.0, at: 0.3 },
+		{ id: 'e4', d: 'M800,80 L860,80', dur: 1.2, delay: 1.5, at: 0.45 },
+		{ id: 'e5', d: 'M740,103 C740,180 600,205 545,254', dur: 2.4, delay: 0.3, at: 0.45 },
+		{ id: 'p1', d: 'M448,346 C448,405 250,392 250,441', dur: 2.6, delay: 0.2, at: 0.76 },
+		{ id: 'p2', d: 'M500,346 L500,441', dur: 2.2, delay: 0.9, at: 0.76 },
+		{ id: 'p3', d: 'M552,346 C552,405 750,392 750,441', dur: 2.6, delay: 1.4, at: 0.76 }
 	];
 
-	// scroll-driven illumination: stages light left-to-right, then LIVE, then the hub.
-	const litStages = $derived(stages.map((_, i) => progress >= 0.06 + i * 0.13));
+	// scroll-driven illumination: commit is lit by default; build/test/deploy light
+	// left-to-right as you scroll, then LIVE, then the hub.
+	const litStages = $derived(stages.map((_, i) => progress >= i * 0.15));
 	const liveLit = $derived(progress >= 0.62);
 	const hubLit = $derived(progress >= 0.76);
-	const packetOpacity = $derived(Math.max(0, Math.min(1, (progress - 0.04) * 5)));
 </script>
 
 <svg
@@ -76,11 +78,12 @@
 		<path class="edge" d={e.d} />
 	{/each}
 
-	<!-- flowing packets -->
-	<g class="packets" style="opacity: {packetOpacity}">
+	<!-- flowing packets — each appears only once its segment of the pipeline is reached -->
+	<g class="packets">
 		{#each edges as e (e.id)}
 			<circle
 				class="packet"
+				class:on={progress >= e.at}
 				r="3.5"
 				style="offset-path: path('{e.d}'); animation-duration: {e.dur}s; animation-delay: {e.delay}s;"
 			/>
@@ -151,6 +154,11 @@
 		animation-timing-function: linear;
 		animation-iteration-count: infinite;
 		filter: drop-shadow(0 0 5px var(--cyan));
+		opacity: 0;
+		transition: opacity 0.35s var(--ease);
+	}
+	.packet.on {
+		opacity: 1;
 	}
 
 	@keyframes flow {
@@ -343,10 +351,12 @@
 
 	/* respect reduced motion: freeze flow + pulse */
 	@media (prefers-reduced-motion: reduce) {
-		.packet {
+		.packet,
+		.packet.on {
 			animation: none;
 			offset-distance: 50%;
 			opacity: 0.5;
+			transition: none;
 		}
 		.live-pulse {
 			display: none;
