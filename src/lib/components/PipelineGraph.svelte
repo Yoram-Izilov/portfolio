@@ -6,10 +6,13 @@
 
 	let {
 		onSelect,
-		activeId = null
+		activeId = null,
+		progress = 1
 	}: {
 		onSelect: (id: string, el: Element) => void;
 		activeId?: string | null;
+		/** 0..1 scroll progress driving the "pipeline runs as you scroll" illumination. 1 = fully lit. */
+		progress?: number;
 	} = $props();
 
 	function handleKey(e: KeyboardEvent, id: string) {
@@ -46,6 +49,12 @@
 		{ id: 'p2', d: 'M500,346 L500,441', dur: 2.2, delay: 0.9 },
 		{ id: 'p3', d: 'M552,346 C552,405 750,392 750,441', dur: 2.6, delay: 1.4 }
 	];
+
+	// scroll-driven illumination: stages light left-to-right, then LIVE, then the hub.
+	const litStages = $derived(stages.map((_, i) => progress >= 0.06 + i * 0.13));
+	const liveLit = $derived(progress >= 0.62);
+	const hubLit = $derived(progress >= 0.76);
+	const packetOpacity = $derived(Math.max(0, Math.min(1, (progress - 0.04) * 5)));
 </script>
 
 <svg
@@ -68,24 +77,26 @@
 	{/each}
 
 	<!-- flowing packets -->
-	{#each edges as e (e.id)}
-		<circle
-			class="packet"
-			r="3.5"
-			style="offset-path: path('{e.d}'); animation-duration: {e.dur}s; animation-delay: {e.delay}s;"
-		/>
-	{/each}
+	<g class="packets" style="opacity: {packetOpacity}">
+		{#each edges as e (e.id)}
+			<circle
+				class="packet"
+				r="3.5"
+				style="offset-path: path('{e.d}'); animation-duration: {e.dur}s; animation-delay: {e.delay}s;"
+			/>
+		{/each}
+	</g>
 
 	<!-- pipeline stages -->
 	{#each stages as s, i (s.id)}
-		<g class="node stage" style="--d: {i * 0.07}s">
+		<g class="node stage" class:lit={litStages[i]} style="--d: {i * 0.07}s">
 			<rect x={s.x - stageW / 2} y={stageY - stageH / 2} width={stageW} height={stageH} rx="9" />
 			<text class="label" x={s.x} y={stageY}>{s.label}</text>
 		</g>
 	{/each}
 
 	<!-- LIVE endpoint -->
-	<g class="node live" style="--d: 0.35s">
+	<g class="node live" class:lit={liveLit} style="--d: 0.35s">
 		<circle class="live-pulse" cx={live.x - 34} cy={live.y} r="7" />
 		<rect x={live.x - live.w / 2} y={live.y - live.h / 2} width={live.w} height={live.h} rx="23" />
 		<circle class="live-dot" cx={live.x - 34} cy={live.y} r="5" />
@@ -93,7 +104,7 @@
 	</g>
 
 	<!-- control plane hub -->
-	<g class="node hub" style="--d: 0.45s">
+	<g class="node hub" class:lit={hubLit} style="--d: 0.45s">
 		<rect x={hub.x - hub.w / 2} y={hub.y - hub.h / 2} width={hub.w} height={hub.h} rx="14" />
 		<text class="hub-title" x={hub.x} y={hub.y - 8}>YORAM IZILOV</text>
 		<text class="hub-sub" x={hub.x} y={hub.y + 20}>control-plane</text>
@@ -164,28 +175,55 @@
 		dominant-baseline: middle;
 	}
 
+	/* stages: dormant by default, illuminate as scroll progress crosses each threshold */
+	.stage rect {
+		transition:
+			stroke 0.35s var(--ease),
+			fill 0.35s var(--ease);
+	}
 	.stage .label {
-		fill: var(--fg-dim);
+		fill: var(--fg-faint);
+		transition: fill 0.35s var(--ease);
+	}
+	.stage.lit rect {
+		stroke: color-mix(in srgb, var(--cyan) 55%, var(--line));
+		fill: #131d2b;
+	}
+	.stage.lit .label {
+		fill: var(--fg);
 	}
 
-	/* LIVE */
+	/* LIVE — dormant until the pipeline reaches it, then goes green and pulses */
 	.live rect {
+		fill: var(--bg-2);
+		stroke: var(--line);
+		transition:
+			fill 0.4s var(--ease),
+			stroke 0.4s var(--ease);
+	}
+	.live-label {
+		fill: var(--fg-faint);
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		transition: fill 0.4s var(--ease);
+	}
+	.live-dot {
+		fill: var(--fg-faint);
+		transition: fill 0.4s var(--ease);
+	}
+	.live.lit rect {
 		fill: rgba(70, 209, 126, 0.1);
 		stroke: var(--green);
 	}
-	.live-label {
-		fill: var(--green);
-		font-weight: 600;
-		letter-spacing: 0.08em;
-	}
-	.live-dot {
+	.live.lit .live-label,
+	.live.lit .live-dot {
 		fill: var(--green);
 	}
 	.live-pulse {
 		fill: var(--green);
 		transform-box: fill-box;
 		transform-origin: center;
-		animation: pulse 2.4s ease-out infinite;
+		display: none;
 	}
 	@keyframes pulse {
 		0% {
@@ -200,12 +238,22 @@
 			opacity: 0;
 		}
 	}
+	@media (prefers-reduced-motion: no-preference) {
+		.live.lit .live-pulse {
+			display: block;
+			animation: pulse 2.4s ease-out infinite;
+		}
+	}
 
-	/* hub */
+	/* hub — control plane comes online once the pipeline has run */
 	.hub rect {
 		fill: var(--bg-1);
-		stroke: var(--cyan);
+		stroke: var(--line);
 		stroke-width: 1.8;
+		transition: stroke 0.4s var(--ease);
+	}
+	.hub.lit rect {
+		stroke: var(--cyan);
 	}
 	.hub-title {
 		fill: var(--fg);
@@ -217,12 +265,16 @@
 		letter-spacing: 0.01em;
 	}
 	.hub-sub {
-		fill: var(--cyan);
+		fill: var(--fg-faint);
 		font-family: var(--font-mono);
 		font-size: 13px;
 		text-anchor: middle;
 		dominant-baseline: middle;
 		letter-spacing: 0.18em;
+		transition: fill 0.4s var(--ease);
+	}
+	.hub.lit .hub-sub {
+		fill: var(--cyan);
 	}
 
 	/* projects */
