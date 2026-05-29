@@ -68,7 +68,7 @@
 	<desc id="graph-desc">
 		An infrastructure diagram: a CI/CD pipeline runs commit, build, test and deploy into a live
 		endpoint and a control plane operated by Yoram, which branches to three projects — a Discord bot
-		with full observability, the Nitzanim EKS status platform, and this site.
+		with full observability, the home-server infrastructure and monitoring stack, and this site.
 	</desc>
 
 	<!-- edges -->
@@ -314,7 +314,7 @@
 	.project.dimmed {
 		opacity: 0.4;
 	}
-	.project:focus-visible {
+	.project:focus {
 		outline: none;
 	}
 

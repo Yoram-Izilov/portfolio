@@ -35,16 +35,23 @@ export const projects: Project[] = [
 		}
 	},
 	{
-		id: 'nitzanim',
-		label: 'nitzanim',
-		sub: 'EKS status platform',
+		id: 'home-server',
+		label: 'home-server',
+		sub: 'observability + infra',
 		x: 500,
 		tagline:
-			'A status & incident-communication platform on EKS — in the spirit of Atlassian Statuspage.',
-		stack: ['AWS', 'EKS', 'Kubernetes'],
-		role: 'Designed & deployed the infrastructure',
-		points: ['Final project for the Nitzanim program', 'Showcased at Microsoft Israel'],
-		note: 'Case study write-up coming.'
+			'The infrastructure control repo behind this box — a self-hosted observability stack and reverse-proxy layer.',
+		stack: ['Prometheus', 'Grafana', 'Loki'],
+		role: 'Designed & operate the infrastructure',
+		points: [
+			'Self-hosted observability: Prometheus metrics, Grafana dashboards, Tempo traces and Loki logs',
+			'Host nginx reverse proxy routing every service on the box by container name',
+			'Each app self-deploys via Jenkins on the same host — secrets from credentials, never committed'
+		],
+		repo: {
+			label: 'github.com/Yoram-Izilov/home-server',
+			href: 'https://github.com/Yoram-Izilov/home-server'
+		}
 	},
 	{
 		id: 'site',
