@@ -9,6 +9,10 @@
 # `otel-collector`/`tempo`. Both networks are external — created by other repos:
 #   - proxy      -> nginx_nginx_network   (host reverse proxy; public routing)
 #   - monitoring -> monitoring_monitoring (observability; created by the monitoring stack)
+#
+# `status-exporter` is a tiny sidecar that polls Prometheus + Loki on the monitoring
+# network and writes a curated status.json to the shared `status` volume, which nginx
+# serves at /status.json (drives the live "OPERATIONAL" badge + visitor pill).
 
 services:
   portfolio:
@@ -21,6 +25,23 @@ services:
     networks:
       - proxy
       - monitoring
+    volumes:
+      - status:/srv/status:ro
+
+  status-exporter:
+    build: ./status-exporter
+    image: portfolio-status-exporter:latest
+    container_name: portfolio-status-exporter
+    restart: unless-stopped
+    environment:
+      POLL_SECONDS: '300'
+    networks:
+      - monitoring
+    volumes:
+      - status:/out
+
+volumes:
+  status:
 
 networks:
   proxy:
