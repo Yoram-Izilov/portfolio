@@ -1,5 +1,21 @@
 <script lang="ts">
 	import PipelineGraph from '$lib/components/PipelineGraph.svelte';
+	import ProjectPanel from '$lib/components/ProjectPanel.svelte';
+	import { projects } from '$lib/data/projects';
+
+	let selectedId = $state<string | null>(null);
+	let originRect = $state<DOMRect | null>(null);
+
+	const selected = $derived(projects.find((p) => p.id === selectedId) ?? null);
+
+	function handleSelect(id: string, el: Element) {
+		originRect = el.getBoundingClientRect();
+		selectedId = id;
+	}
+
+	function handleClose() {
+		selectedId = null;
+	}
 </script>
 
 <main class="hero">
@@ -15,13 +31,15 @@
 		</header>
 
 		<figure class="graph-wrap">
-			<PipelineGraph />
+			<PipelineGraph onSelect={handleSelect} activeId={selectedId} />
 			<figcaption class="caption mono">
-				the system above is the site you're on — shipped through the same pipeline
+				click a project node to drill in — the system above is the site you're on
 			</figcaption>
 		</figure>
 	</div>
 </main>
+
+<ProjectPanel project={selected} {originRect} onClose={handleClose} />
 
 <style>
 	.hero {

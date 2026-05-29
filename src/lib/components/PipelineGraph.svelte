@@ -1,7 +1,23 @@
 <script lang="ts">
+	import { projects } from '$lib/data/projects';
+
 	type Stage = { id: string; label: string; x: number };
-	type Project = { id: string; label: string; sub: string; x: number; href?: string };
 	type Edge = { id: string; d: string; dur: number; delay: number };
+
+	let {
+		onSelect,
+		activeId = null
+	}: {
+		onSelect: (id: string, el: Element) => void;
+		activeId?: string | null;
+	} = $props();
+
+	function handleKey(e: KeyboardEvent, id: string) {
+		if (e.key === 'Enter' || e.key === ' ') {
+			e.preventDefault();
+			onSelect(id, e.currentTarget as Element);
+		}
+	}
 
 	const stageY = 80;
 	const stageW = 120;
@@ -19,23 +35,6 @@
 	const projY = 470;
 	const projW = 176;
 	const projH = 58;
-	const projects: Project[] = [
-		{
-			id: 'discord',
-			label: 'discord-bot',
-			sub: 'full observability',
-			x: 250,
-			href: 'https://github.com/Yoram-Izilov/discord-py'
-		},
-		{ id: 'nitzanim', label: 'nitzanim', sub: 'EKS status platform', x: 500 },
-		{
-			id: 'site',
-			label: 'this-site',
-			sub: "you're in it",
-			x: 750,
-			href: 'https://github.com/Yoram-Izilov/portfolio'
-		}
-	];
 
 	const edges: Edge[] = [
 		{ id: 'e1', d: 'M170,80 L260,80', dur: 1.5, delay: 0 },
@@ -100,30 +99,24 @@
 		<text class="hub-sub" x={hub.x} y={hub.y + 20}>control-plane</text>
 	</g>
 
-	<!-- project nodes -->
-	<!-- eslint-disable svelte/no-navigation-without-resolve -- external repo links; resolve() is for internal SvelteKit routes -->
+	<!-- project nodes (drill-in) -->
 	{#each projects as p, i (p.id)}
-		{#if p.href}
-			<a
-				href={p.href}
-				target="_blank"
-				rel="noopener noreferrer"
-				class="node project"
-				style="--d: {0.6 + i * 0.08}s"
-			>
-				<rect x={p.x - projW / 2} y={projY - projH / 2} width={projW} height={projH} rx="11" />
-				<text class="proj-label" x={p.x} y={projY - 6}>{p.label}</text>
-				<text class="proj-sub" x={p.x} y={projY + 14}>{p.sub}</text>
-			</a>
-		{:else}
-			<g class="node project" style="--d: {0.6 + i * 0.08}s">
-				<rect x={p.x - projW / 2} y={projY - projH / 2} width={projW} height={projH} rx="11" />
-				<text class="proj-label" x={p.x} y={projY - 6}>{p.label}</text>
-				<text class="proj-sub" x={p.x} y={projY + 14}>{p.sub}</text>
-			</g>
-		{/if}
+		<g
+			class="node project"
+			class:active={activeId === p.id}
+			class:dimmed={activeId !== null && activeId !== p.id}
+			role="button"
+			tabindex="0"
+			aria-label="Open details for {p.label}"
+			style="--d: {0.6 + i * 0.08}s"
+			onclick={(e) => onSelect(p.id, e.currentTarget)}
+			onkeydown={(e) => handleKey(e, p.id)}
+		>
+			<rect x={p.x - projW / 2} y={projY - projH / 2} width={projW} height={projH} rx="11" />
+			<text class="proj-label" x={p.x} y={projY - 6}>{p.label}</text>
+			<text class="proj-sub" x={p.x} y={projY + 14}>{p.sub}</text>
+		</g>
 	{/each}
-	<!-- eslint-enable svelte/no-navigation-without-resolve -->
 </svg>
 
 <style>
@@ -252,13 +245,25 @@
 		text-anchor: middle;
 		dominant-baseline: middle;
 	}
-	a.project {
+	.project {
 		cursor: pointer;
+		transition: opacity 0.25s ease;
 	}
-	a.project:hover rect,
-	a.project:focus-visible rect {
+	.project:hover rect,
+	.project:focus-visible rect,
+	.project.active rect {
 		stroke: var(--cyan);
 		fill: #182433;
+	}
+	.project.active rect {
+		stroke-width: 2;
+		filter: drop-shadow(0 0 10px color-mix(in srgb, var(--cyan) 55%, transparent));
+	}
+	.project.dimmed {
+		opacity: 0.4;
+	}
+	.project:focus-visible {
+		outline: none;
 	}
 
 	/* entrance — only when motion is welcome; default state is fully visible */
