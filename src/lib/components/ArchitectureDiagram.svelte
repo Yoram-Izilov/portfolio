@@ -8,11 +8,17 @@
 	// Deliberately free of real internal IPs / hostnames — same discipline as the
 	// status-exporter (curated surface only).
 
-	// request-path edges that carry a flowing packet
+	// A signal descending the full path, top to bottom: visitors → nginx → the
+	// nginx_nginx_network rail → portfolio → the monitoring_monitoring rail →
+	// the monitoring stack. Each segment is a slow, independently looping packet;
+	// the staggered delays make the first pass read as one wave travelling all the
+	// way down, after which they settle into ambient flow on every edge.
 	const flow: { id: string; d: string; dur: number; delay: number }[] = [
-		{ id: 'f1', d: 'M500,70 L500,104', dur: 1.4, delay: 0 },
-		{ id: 'f2', d: 'M500,168 L500,212', dur: 1.2, delay: 0.5 },
-		{ id: 'f3', d: 'M340,236 L340,268', dur: 1.1, delay: 1 }
+		{ id: 'f1', d: 'M500,70 L500,104', dur: 1.6, delay: 0 }, // visitors → nginx
+		{ id: 'f2', d: 'M500,168 L500,212', dur: 1.8, delay: 1.2 }, // nginx → rail A
+		{ id: 'f3', d: 'M340,214 L340,268', dur: 1.6, delay: 2.6 }, // rail A → portfolio
+		{ id: 'f4', d: 'M340,332 L340,392', dur: 1.9, delay: 4.0 }, // portfolio → rail B (telemetry)
+		{ id: 'f5', d: 'M500,392 L500,420', dur: 1.4, delay: 5.4 } // rail B → monitoring stack
 	];
 </script>
 
@@ -34,11 +40,11 @@
 	</desc>
 
 	<!-- ===== network rails (the contracts) ===== -->
-	<g class="rail rail-a">
+	<g class="rail rail-a" style="--d: 0.75s">
 		<line x1="170" y1="214" x2="830" y2="214" />
 		<text class="rail-label" x="170" y="200">nginx_nginx_network</text>
 	</g>
-	<g class="rail rail-b">
+	<g class="rail rail-b" style="--d: 1.6s">
 		<line x1="120" y1="392" x2="880" y2="392" />
 		<text class="rail-label rail-label-b" x="120" y="378">monitoring_monitoring</text>
 	</g>
@@ -46,21 +52,21 @@
 	<!-- ===== structural edges ===== -->
 	<g class="edges">
 		<!-- nginx down to rail A -->
-		<path class="edge" d="M500,168 L500,214" />
+		<path class="edge" d="M500,168 L500,214" style="--d: 0.6s" />
 		<!-- rail A to the two app containers -->
-		<path class="edge" d="M340,214 L340,268" />
-		<path class="edge" d="M660,214 L660,268" />
+		<path class="edge" d="M340,214 L340,268" style="--d: 0.95s" />
+		<path class="edge" d="M660,214 L660,268" style="--d: 0.98s" />
 		<!-- app containers down to rail B (telemetry) -->
-		<path class="edge dashed" d="M340,332 L340,392" />
-		<path class="edge dashed" d="M660,332 L660,392" />
+		<path class="edge dashed" d="M340,332 L340,392" style="--d: 1.45s" />
+		<path class="edge dashed" d="M660,332 L660,392" style="--d: 1.48s" />
 		<!-- rail B to the monitoring stack -->
-		<path class="edge" d="M500,392 L500,420" />
+		<path class="edge" d="M500,392 L500,420" style="--d: 1.8s" />
 		<!-- monitoring stack read by the status-exporter -->
-		<path class="edge dashed" d="M320,470 L246,470" />
+		<path class="edge dashed" d="M320,470 L246,470" style="--d: 2.4s" />
 		<!-- status-exporter writes status.json back into portfolio (self-reference) -->
-		<path class="edge dashed return" d="M172,440 C172,360 300,352 308,302" />
+		<path class="edge dashed return" d="M172,440 C172,360 300,352 308,302" style="--d: 2.5s" />
 		<!-- Jenkins deploys the app containers -->
-		<path class="edge dashed deploy" d="M828,440 C828,360 700,352 692,302" />
+		<path class="edge dashed deploy" d="M828,440 C828,360 700,352 692,302" style="--d: 2.5s" />
 	</g>
 
 	<!-- ===== packets on the request path ===== -->
@@ -83,42 +89,42 @@
 	</g>
 
 	<!-- host nginx reverse proxy -->
-	<g class="node nginx" style="--d: 0.08s">
+	<g class="node nginx" style="--d: 0.35s">
 		<rect x="360" y="106" width="280" height="62" rx="12" />
 		<text class="node-title" x="500" y="130">host nginx</text>
 		<text class="node-sub" x="500" y="152">reverse proxy · routes by container name</text>
 	</g>
 
 	<!-- portfolio container -->
-	<g class="node app" style="--d: 0.2s">
+	<g class="node app" style="--d: 1.15s">
 		<rect x="250" y="268" width="180" height="64" rx="11" />
 		<text class="node-title sm" x="340" y="292">portfolio</text>
 		<text class="node-sub" x="340" y="314">SvelteKit → nginx:80</text>
 	</g>
 
 	<!-- discord bot container -->
-	<g class="node app" style="--d: 0.28s">
+	<g class="node app" style="--d: 1.18s">
 		<rect x="570" y="268" width="180" height="64" rx="11" />
 		<text class="node-title sm" x="660" y="292">mydiscordbot</text>
 		<text class="node-sub" x="660" y="314">Python · OTel traces</text>
 	</g>
 
 	<!-- monitoring stack -->
-	<g class="node stack" style="--d: 0.4s">
+	<g class="node stack" style="--d: 1.95s">
 		<rect x="320" y="420" width="360" height="76" rx="12" />
 		<text class="node-title" x="500" y="450">monitoring stack</text>
 		<text class="node-sub" x="500" y="474">Prometheus · Grafana · Loki · Tempo</text>
 	</g>
 
 	<!-- status-exporter sidecar -->
-	<g class="node sidecar" style="--d: 0.5s">
+	<g class="node sidecar" style="--d: 2.2s">
 		<rect x="92" y="440" width="154" height="60" rx="11" />
 		<text class="node-title sm" x="169" y="464">status-exporter</text>
 		<text class="node-sub" x="169" y="485">→ status.json</text>
 	</g>
 
 	<!-- jenkins -->
-	<g class="node jenkins" style="--d: 0.5s">
+	<g class="node jenkins" style="--d: 2.2s">
 		<rect x="754" y="440" width="154" height="60" rx="11" />
 		<text class="node-title sm" x="831" y="464">Jenkins</text>
 		<text class="node-sub" x="831" y="485">deploy on main</text>
@@ -243,18 +249,16 @@
 		transform-origin: center;
 	}
 
-	/* entrance — only when motion is welcome; default state is fully visible */
+	/* entrance — only when motion is welcome; default state is fully visible.
+	   Every element carries its own --d so the diagram unfurls in vertical order,
+	   top (visitors) to bottom (monitoring stack), rather than all at once. */
 	@media (prefers-reduced-motion: no-preference) {
 		.node,
 		.edges path,
 		.rail {
 			opacity: 0;
-			animation: rise 0.7s var(--ease) forwards;
+			animation: rise 0.9s var(--ease) forwards;
 			animation-delay: var(--d, 0.12s);
-		}
-		.edges path,
-		.rail {
-			animation-delay: 0.1s;
 		}
 		.ping {
 			animation: ping 2.4s ease-out infinite;
