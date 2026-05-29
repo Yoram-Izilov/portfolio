@@ -1,3 +1,5 @@
+import type { Pathname } from '$app/types';
+
 export type Project = {
 	id: string;
 	/** node label (mono) */
@@ -13,6 +15,8 @@ export type Project = {
 	points: string[];
 	repo?: { label: string; href: string };
 	note?: string;
+	/** internal route to a deep-dive case study, if one exists */
+	caseStudy?: Pathname;
 };
 
 export const projects: Project[] = [
@@ -51,7 +55,8 @@ export const projects: Project[] = [
 		repo: {
 			label: 'github.com/Yoram-Izilov/home-server',
 			href: 'https://github.com/Yoram-Izilov/home-server'
-		}
+		},
+		caseStudy: '/work/home-server'
 	},
 	{
 		id: 'site',

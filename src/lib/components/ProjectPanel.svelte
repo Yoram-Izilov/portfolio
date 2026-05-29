@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { gsap } from 'gsap';
+	import { resolve } from '$app/paths';
 	import type { Project } from '$lib/data/projects';
 
 	let {
@@ -110,6 +111,11 @@
 			</ul>
 
 			<div class="foot">
+				{#if current.caseStudy}
+					<a class="case-study mono" href={resolve(current.caseStudy)}>
+						Read the case study<span class="arrow" aria-hidden="true">→</span>
+					</a>
+				{/if}
 				{#if current.repo}
 					<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- external repo link -->
 					<a class="repo mono" href={current.repo.href} target="_blank" rel="noopener noreferrer">
@@ -247,7 +253,39 @@
 	.foot {
 		border-top: 1px solid var(--line);
 		padding-top: 1.1rem;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.7rem 1.25rem;
 	}
+
+	/* primary action — present only when the project has a deep-dive write-up */
+	.case-study {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5em;
+		font-size: 0.85rem;
+		color: var(--bg);
+		background: var(--cyan);
+		padding: 0.55em 1em;
+		border-radius: 8px;
+		letter-spacing: 0.02em;
+		transition:
+			transform 0.15s var(--ease),
+			box-shadow 0.15s ease;
+	}
+	.case-study .arrow {
+		transition: transform 0.15s var(--ease);
+	}
+	.case-study:hover,
+	.case-study:focus-visible {
+		box-shadow: 0 0 24px -4px color-mix(in srgb, var(--cyan) 60%, transparent);
+	}
+	.case-study:hover .arrow,
+	.case-study:focus-visible .arrow {
+		transform: translateX(3px);
+	}
+
 	.repo {
 		display: inline-flex;
 		align-items: center;
