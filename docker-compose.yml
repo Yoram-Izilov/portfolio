@@ -5,7 +5,10 @@
 #   docker compose up -d --build  # force a rebuild
 #   docker compose logs -f
 #
-# The `proxy` network is your existing nginx network (external — created elsewhere).
+# It also joins the monitoring stack's network so nginx can ship OpenTelemetry spans to
+# `otel-collector`/`tempo`. Both networks are external — created by other repos:
+#   - proxy      -> nginx_nginx_network   (host reverse proxy; public routing)
+#   - monitoring -> monitoring_monitoring (observability; created by the monitoring stack)
 
 services:
   portfolio:
@@ -17,8 +20,12 @@ services:
       - '80'
     networks:
       - proxy
+      - monitoring
 
 networks:
   proxy:
     external: true
     name: nginx_nginx_network
+  monitoring:
+    external: true
+    name: monitoring_monitoring
