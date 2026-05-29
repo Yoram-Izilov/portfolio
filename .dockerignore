@@ -1,0 +1,22 @@
+# Build artifacts & deps (rebuilt inside the image)
+node_modules
+build
+.svelte-kit
+
+# VCS & CI
+.git
+.gitattributes
+.github
+# NOTE: .gitignore is intentionally NOT ignored — eslint.config.js reads it via includeIgnoreFile()
+
+# Tooling / meta not needed for the build
+.claude
+.vscode
+*.md
+.env
+.env.*
+
+# Container files (not needed inside the image; nginx.conf IS copied, so keep it)
+Dockerfile
+.dockerignore
+Jenkinsfile

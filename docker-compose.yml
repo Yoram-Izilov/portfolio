@@ -1,0 +1,24 @@
+# Runs the portfolio as the `portfolio` container on the same Docker network as the
+# host nginx reverse proxy, so `proxy_pass http://portfolio:80/` resolves by name.
+#
+#   docker compose up -d          # build (if needed) + start
+#   docker compose up -d --build  # force a rebuild
+#   docker compose logs -f
+#
+# The `proxy` network is your existing nginx network (external — created elsewhere).
+
+services:
+  portfolio:
+    build: .
+    image: portfolio:latest
+    container_name: portfolio
+    restart: unless-stopped
+    expose:
+      - '80'
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
+    name: nginx_nginx_network
