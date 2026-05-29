@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { beforeNavigate } from '$app/navigation';
 	import PipelineGraph from '$lib/components/PipelineGraph.svelte';
 	import ProjectPanel from '$lib/components/ProjectPanel.svelte';
 	import ApproachPipeline from '$lib/components/ApproachPipeline.svelte';
@@ -12,6 +13,18 @@
 	// Starts dormant; reduced-motion / no-JS fall back to fully lit (see onMount).
 	let progress = $state(0);
 	let heroEl: HTMLElement;
+
+	// The hero's ScrollTrigger pin handle. Hoisted to component scope so it can be torn
+	// down in beforeNavigate (below) — killing it only in onMount's destroy cleanup runs
+	// too late on a client-side navigation: GSAP's pin-spacer is left orphaned at the top
+	// of the page, pushing the next route's content below the fold ("stays on top" bug).
+	let st: { kill: () => void } | undefined;
+
+	// Remove the pin-spacer while the hero is still mounted, before SvelteKit swaps the DOM.
+	beforeNavigate(() => {
+		st?.kill();
+		st = undefined;
+	});
 
 	const selected = $derived(projects.find((p) => p.id === selectedId) ?? null);
 
@@ -63,7 +76,6 @@
 			return;
 		}
 
-		let st: { kill: () => void } | undefined;
 		let onLoad: (() => void) | undefined;
 		let cancelled = false;
 
