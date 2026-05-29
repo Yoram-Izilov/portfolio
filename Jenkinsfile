@@ -51,11 +51,12 @@ pipeline {
                     docker rm -f "$cname" >/dev/null 2>&1 || true
                     docker run -d --name "$cname" "$IMAGE"
                     # wait for nginx to come up, then assert it actually serves the hero
+                    # (image is Debian nginx — uses curl; there is no wget)
                     for i in $(seq 1 15); do
-                        if docker exec "$cname" wget -qO- http://localhost/ >/dev/null 2>&1; then break; fi
+                        if docker exec "$cname" curl -fsS http://localhost/ >/dev/null 2>&1; then break; fi
                         sleep 1
                     done
-                    docker exec "$cname" wget -qO- http://localhost/ | grep -q "Yoram Izilov"
+                    docker exec "$cname" curl -fsS http://localhost/ | grep -q "Yoram Izilov"
                 '''
             }
             post {
