@@ -25,8 +25,8 @@
 		{
 			tag: 'OBSERVE',
 			title: 'Instrumented before it breaks.',
-			body: 'Metrics, dashboards and alerting with Prometheus, Grafana and the ELK stack. If it is running in production, it is telling me how it feels.',
-			tech: ['Prometheus', 'Grafana', 'ELK']
+			body: 'Metrics, dashboards and alerting with Prometheus, Grafana and Loki. If it is running in production, it is telling me how it feels.',
+			tech: ['Prometheus', 'Grafana', 'Loki']
 		},
 		{
 			tag: 'SHIP',
