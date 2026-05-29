@@ -77,6 +77,22 @@ pipeline {
                 '''
             }
         }
+
+        stage('Deploy (main only)') {
+            // Deploys to the same Docker host as the Jenkins agent via docker compose.
+            // For a single-branch pipeline where BRANCH_NAME is unset, the GIT_BRANCH check
+            // covers it; remove this `when` to deploy on every run. Uses compose v2
+            // (`docker compose`); for v1 swap to `docker-compose`.
+            when {
+                anyOf {
+                    branch 'main'
+                    expression { (env.GIT_BRANCH ?: '') ==~ /(origin\/)?main/ }
+                }
+            }
+            steps {
+                sh 'docker compose up -d --remove-orphans'
+            }
+        }
     }
 
     post {
