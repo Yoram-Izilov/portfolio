@@ -15,6 +15,28 @@
 
 	const selected = $derived(projects.find((p) => p.id === selectedId) ?? null);
 
+	// Live status badge — hydrated from /status.json (written by the status-exporter
+	// sidecar from the monitoring stack). Stays null during prerender / no-JS, so the
+	// markup below renders the static green "OPERATIONAL" fallback untouched.
+	type SiteStatus = {
+		status: 'operational' | 'degraded' | 'down';
+		uptime_7d: number | null;
+		unique_visitors_7d: number | null;
+		generated_at: string;
+	};
+
+	let live = $state<SiteStatus | null>(null);
+
+	// The sidecar polls every ~5min; treat data older than 2x that as stale (degraded).
+	const STALE_MS = 15 * 60 * 1000;
+
+	const degraded = $derived(
+		!!live &&
+			(live.status !== 'operational' ||
+				Date.now() - new Date(live.generated_at).getTime() > STALE_MS)
+	);
+	const visitors = $derived(live?.unique_visitors_7d ?? null);
+
 	function handleSelect(id: string, el: Element) {
 		originRect = el.getBoundingClientRect();
 		selectedId = id;
@@ -25,6 +47,17 @@
 	}
 
 	onMount(() => {
+		// Hydrate the live status badge — independent of the motion setup below, and
+		// placed before the reduced-motion early-return so it always runs.
+		fetch('/status.json', { cache: 'no-store' })
+			.then((r) => (r.ok ? r.json() : null))
+			.then((d: SiteStatus | null) => {
+				if (d) live = d;
+			})
+			.catch(() => {
+				/* network/parse error — leave the static OPERATIONAL fallback in place */
+			});
+
 		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 			progress = 1;
 			return;
@@ -63,7 +96,17 @@
 <main class="hero" bind:this={heroEl}>
 	<div class="hero-inner">
 		<header class="intro">
-			<p class="status mono"><span class="dot" aria-hidden="true"></span>OPERATIONAL</p>
+			<div class="badges">
+				<p class="status mono" class:degraded>
+					<span class="dot" aria-hidden="true"></span>{degraded ? 'DEGRADED' : 'OPERATIONAL'}
+				</p>
+				{#if visitors != null}
+					<p class="status visitors mono">
+						<span class="dot" aria-hidden="true"></span>{visitors.toLocaleString()} unique visitors ·
+						7d
+					</p>
+				{/if}
+			</div>
 			<p class="eyebrow mono">DevOps Engineer</p>
 			<h1>Yoram Izilov</h1>
 			<p class="tagline">
@@ -145,6 +188,35 @@
 		border-radius: 50%;
 		background: var(--green);
 		box-shadow: 0 0 8px var(--green);
+	}
+
+	.badges {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		align-self: flex-start;
+	}
+
+	/* Degraded / stale health — amber, so green stays meaningful as "healthy". */
+	.status.degraded {
+		color: var(--amber);
+		border-color: color-mix(in srgb, var(--amber) 35%, transparent);
+		background: color-mix(in srgb, var(--amber) 8%, transparent);
+	}
+	.status.degraded .dot {
+		background: var(--amber);
+		box-shadow: 0 0 8px var(--amber);
+	}
+
+	/* Visitor count — understated cyan, distinct from the health badge. */
+	.visitors {
+		color: var(--fg-dim);
+		border-color: color-mix(in srgb, var(--cyan) 30%, transparent);
+		background: color-mix(in srgb, var(--cyan) 6%, transparent);
+	}
+	.visitors .dot {
+		background: var(--cyan);
+		box-shadow: 0 0 8px var(--cyan);
 	}
 
 	.eyebrow {
