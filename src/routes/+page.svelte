@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { beforeNavigate } from '$app/navigation';
 	import InteractiveGrid from '$lib/components/InteractiveGrid.svelte';
 	import PipelineGraph from '$lib/components/PipelineGraph.svelte';
 	import ProjectPanel from '$lib/components/ProjectPanel.svelte';
@@ -10,22 +9,14 @@
 	let selectedId = $state<string | null>(null);
 	let originRect = $state<DOMRect | null>(null);
 
-	// 0..1 — drives the hero pipeline's scroll-run illumination.
-	// Starts dormant; reduced-motion / no-JS fall back to fully lit (see onMount).
+	// 0..1 — drives the hero pipeline's light-up illumination.
+	// Starts dormant; tweened to 1 on mount (see onMount). Reduced-motion / no-JS
+	// fall back to fully lit.
 	let progress = $state(0);
 	let heroEl: HTMLElement;
 
-	// The hero's ScrollTrigger pin handle. Hoisted to component scope so it can be torn
-	// down in beforeNavigate (below) — killing it only in onMount's destroy cleanup runs
-	// too late on a client-side navigation: GSAP's pin-spacer is left orphaned at the top
-	// of the page, pushing the next route's content below the fold ("stays on top" bug).
-	let st: { kill: () => void } | undefined;
-
-	// Remove the pin-spacer while the hero is still mounted, before SvelteKit swaps the DOM.
-	beforeNavigate(() => {
-		st?.kill();
-		st = undefined;
-	});
+	// The hero light-up tween, hoisted so onMount's cleanup can kill it.
+	let tween: { kill: () => void } | undefined;
 
 	const selected = $derived(projects.find((p) => p.id === selectedId) ?? null);
 
@@ -77,31 +68,26 @@
 			return;
 		}
 
-		let onLoad: (() => void) | undefined;
 		let cancelled = false;
 
-		import('gsap').then(async ({ gsap }) => {
-			const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+		// Light up the pipeline as a staggered entrance on load — no scroll, no pin.
+		// The tween ramps `progress` 0→1; PipelineGraph's per-stage thresholds
+		// (0/0.15/0.30/0.45 → 0.62 → 0.76) turn that even ramp into a commit→…→hub cascade.
+		import('gsap').then(({ gsap }) => {
 			if (cancelled || !heroEl) return;
-			gsap.registerPlugin(ScrollTrigger);
-			st = ScrollTrigger.create({
-				trigger: heroEl,
-				start: 'top top',
-				end: '+=120%',
-				pin: true,
-				pinSpacing: true,
-				scrub: 0.5,
-				onUpdate: (self: { progress: number }) => (progress = self.progress)
+			const o = { p: 0 };
+			tween = gsap.to(o, {
+				p: 1,
+				duration: 2.1, // total light-up time
+				delay: 0.25, // let the node/edge entrance draw first
+				ease: 'none', // even cadence; the thresholds supply the stagger
+				onUpdate: () => (progress = o.p)
 			});
-			// fonts/late layout can shift pin math — recalc once everything has loaded
-			onLoad = () => ScrollTrigger.refresh();
-			window.addEventListener('load', onLoad);
 		});
 
 		return () => {
 			cancelled = true;
-			if (onLoad) window.removeEventListener('load', onLoad);
-			st?.kill();
+			tween?.kill();
 		};
 	});
 </script>
@@ -133,7 +119,7 @@
 		<figure class="graph-wrap">
 			<PipelineGraph onSelect={handleSelect} activeId={selectedId} {progress} />
 			<figcaption class="caption mono">
-				scroll to run the pipeline · click a project node to drill in
+				the pipeline that ships this site · click a node to drill in
 			</figcaption>
 		</figure>
 	</div>
