@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { beforeNavigate } from '$app/navigation';
+	import InteractiveGrid from '$lib/components/InteractiveGrid.svelte';
 	import PipelineGraph from '$lib/components/PipelineGraph.svelte';
 	import ProjectPanel from '$lib/components/ProjectPanel.svelte';
 	import ApproachPipeline from '$lib/components/ApproachPipeline.svelte';
@@ -105,6 +106,8 @@
 	});
 </script>
 
+<InteractiveGrid />
+
 <main class="hero" bind:this={heroEl}>
 	<div class="hero-inner">
 		<header class="intro">
@@ -150,19 +153,9 @@
 		padding: clamp(2rem, 5vw, 4rem) clamp(1.25rem, 5vw, 3rem);
 	}
 
-	/* blueprint grid */
-	.hero::before {
-		content: '';
-		position: absolute;
-		inset: 0;
-		background-image:
-			linear-gradient(var(--grid) 1px, transparent 1px),
-			linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-		background-size: 44px 44px;
-		-webkit-mask-image: radial-gradient(120% 90% at 50% 0%, #000 30%, transparent 80%);
-		mask-image: radial-gradient(120% 90% at 50% 0%, #000 30%, transparent 80%);
-		pointer-events: none;
-	}
+	/* blueprint grid is now provided site-wide by InteractiveGrid (mounted in
+	   +layout.svelte); the hero-local grid was removed to avoid doubled, drifting
+	   lines against the fixed global grid on scroll. */
 
 	.hero-inner {
 		position: relative;

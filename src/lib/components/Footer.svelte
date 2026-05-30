@@ -28,7 +28,15 @@
 <style>
 	.site-footer {
 		border-top: 1px solid var(--line);
-		background: color-mix(in srgb, var(--bg-1) 70%, transparent);
+		/* Opaque var(--bg) base under the translucent tint so the home page's
+		   fixed InteractiveGrid doesn't show through the footer. The tint must be
+		   a gradient (image) layer — a bare color is only valid as the last layer. */
+		background:
+			linear-gradient(
+				color-mix(in srgb, var(--bg-1) 70%, transparent),
+				color-mix(in srgb, var(--bg-1) 70%, transparent)
+			),
+			var(--bg);
 		padding: clamp(1rem, 3vw, 1.4rem) clamp(1.25rem, 5vw, 3rem);
 		font-size: 0.74rem;
 	}
