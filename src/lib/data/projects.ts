@@ -26,11 +26,11 @@ export const projects: Project[] = [
 		sub: 'full observability',
 		x: 250,
 		tagline: 'A Python Discord bot wired for end-to-end observability.',
-		stack: ['Python', 'Prometheus', 'Grafana'],
-		role: 'Solo build',
+		stack: ['Python', 'OpenTelemetry', 'Tempo', 'Pyroscope', 'Prometheus', 'Loki', 'Grafana'],
+		role: 'Built with a friend',
 		points: [
-			'Prometheus metrics across commands and the runtime hot path',
-			'Grafana dashboards and alerting on the bot’s own health',
+			'Every function traced to Tempo and continuously profiled by Pyroscope',
+			'Prometheus metrics and Loki logs, all rendered in Grafana with alerting',
 			'The same observe-before-it-breaks pattern I run in production - in miniature'
 		],
 		repo: {
