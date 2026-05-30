@@ -26,8 +26,8 @@ export const caseStudies: Record<string, CaseStudy> = {
 		role: 'Designed & operate the infrastructure',
 		stack: ['nginx', 'Docker Compose', 'Jenkins', 'Prometheus', 'Grafana', 'Loki', 'Tempo'],
 		repo: {
-			label: 'github.com/Yoram-Izilov/home-server',
-			href: 'https://github.com/Yoram-Izilov/home-server'
+			label: 'github.com/yoram-izilov/home-server',
+			href: 'https://github.com/yoram-izilov/home-server'
 		},
 		projectId: 'home-server'
 	}
