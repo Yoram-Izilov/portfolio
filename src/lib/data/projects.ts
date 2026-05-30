@@ -34,8 +34,8 @@ export const projects: Project[] = [
 			'The same observe-before-it-breaks pattern I run in production — in miniature'
 		],
 		repo: {
-			label: 'github.com/Yoram-Izilov/discord-py',
-			href: 'https://github.com/Yoram-Izilov/discord-py'
+			label: 'github.com/yoram-izilov/discord-py',
+			href: 'https://github.com/yoram-izilov/discord-py'
 		}
 	},
 	{
@@ -53,8 +53,8 @@ export const projects: Project[] = [
 			'Each app self-deploys via Jenkins on the same host — secrets from credentials, never committed'
 		],
 		repo: {
-			label: 'github.com/Yoram-Izilov/home-server',
-			href: 'https://github.com/Yoram-Izilov/home-server'
+			label: 'github.com/yoram-izilov/home-server',
+			href: 'https://github.com/yoram-izilov/home-server'
 		},
 		caseStudy: '/work/home-server'
 	},
@@ -72,8 +72,8 @@ export const projects: Project[] = [
 			'The concept: the navigation you’re using is the system diagram'
 		],
 		repo: {
-			label: 'github.com/Yoram-Izilov/portfolio',
-			href: 'https://github.com/Yoram-Izilov/portfolio'
+			label: 'github.com/yoram-izilov/portfolio',
+			href: 'https://github.com/yoram-izilov/portfolio'
 		}
 	}
 ];
