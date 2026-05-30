@@ -27,6 +27,13 @@
 	--maxw: 1200px;
 	--ease: cubic-bezier(0.22, 1, 0.36, 1);
 
+	/* Brand-cyan arrow cursor: the native arrow shape recolored to --cyan
+	   (#4fe3d4) with a dark (#07111a) outline so it stays legible on any
+	   background. Hotspot at the arrow tip (top-left). Clickables keep the
+	   native pointer hand. */
+	--cursor-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M1 1 L1 18 L5 14 L8 20.5 L10.5 19.5 L7 13 L12 13 Z' fill='%234fe3d4' stroke='%2307111a' stroke-width='1.2' stroke-linejoin='round'/%3E%3C/svg%3E")
+		2 2;
+
 	color-scheme: dark;
 }
 
@@ -54,6 +61,21 @@ body {
 	line-height: 1.5;
 	-webkit-font-smoothing: antialiased;
 	text-rendering: optimizeLegibility;
+}
+
+/* Brand-cyan cursor (see --cursor-* in :root). The SVG image is drawn by the
+   browser on top of all content, so it stays visible over the ProjectPanel
+   popup; Safari ignores SVG cursors and uses the keyword fallback. */
+html {
+	cursor: var(--cursor-arrow), default;
+}
+
+/* text fields keep a caret */
+input,
+textarea,
+select,
+[contenteditable] {
+	cursor: text;
 }
 
 h1,
