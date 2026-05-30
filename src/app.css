@@ -37,14 +37,17 @@
 }
 
 html {
-	background: var(--bg);
+	/* Base page fill lives on <html> so the InteractiveGrid (a fixed z-index:-1
+	   child of <body>) paints above it. If this sat on <body>, the body's opaque
+	   background would paint over the negative-z grid and hide it. */
+	background:
+		radial-gradient(1200px 700px at 80% -10%, rgba(79, 227, 212, 0.06), transparent 60%), var(--bg);
 }
 
 body {
 	margin: 0;
 	min-height: 100vh;
-	background:
-		radial-gradient(1200px 700px at 80% -10%, rgba(79, 227, 212, 0.06), transparent 60%), var(--bg);
+	background: transparent;
 	color: var(--fg);
 	font-family: var(--font-display);
 	font-size: 16px;
