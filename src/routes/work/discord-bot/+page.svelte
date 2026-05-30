@@ -131,6 +131,13 @@
 					on the bot's own health.
 				</li>
 				<li>
+					<span class="d-title mono">Logs to Loki, via promtail.</span>
+					The bot and Postgres log to stdout; a <span class="mono">promtail</span> sidecar scrapes
+					the containers' logs off the Docker socket and ships them to
+					<span class="mono">Loki</span>, so Grafana queries them next to the traces, profiles and
+					metrics — the fourth signal in the same pane of glass.
+				</li>
+				<li>
 					<span class="d-title mono">A debug switch for local dev.</span>
 					Setting <code>debug: true</code> never sets up the tracer or profiler and skips the background
 					tasks — so I can run the bot against a local Postgres without exporting telemetry to nowhere
@@ -151,10 +158,10 @@
 			<h2><span class="mono num">04</span> What it proves</h2>
 			<p>
 				It's the same observe-before-it-breaks pattern I run on production AWS and Kubernetes —
-				traces, profiles, metrics and alerting wired in from the start — at the scale of one hobby
-				bot. The bot attaches to the same <span class="mono">monitoring_monitoring</span> network as everything
-				else on the box, so it shares the home-server observability stack rather than reinventing one.
-				Instrumentation isn't a thing I add when something breaks; it's the default the code is written
+				traces, logs, profiles, metrics and alerting wired in from the start — at the scale of one
+				hobby bot. The bot attaches to the same <span class="mono">monitoring_monitoring</span> network
+				as everything else on the box, so it shares the home-server observability stack rather than reinventing
+				one. Instrumentation isn't a thing I add when something breaks; it's the default the code is written
 				against.
 			</p>
 
