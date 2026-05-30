@@ -7,7 +7,7 @@ build
 .git
 .gitattributes
 .github
-# NOTE: .gitignore is intentionally NOT ignored — eslint.config.js reads it via includeIgnoreFile()
+# NOTE: .gitignore is intentionally NOT ignored - eslint.config.js reads it via includeIgnoreFile()
 
 # Tooling / meta not needed for the build
 .claude

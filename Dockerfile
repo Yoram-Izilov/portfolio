@@ -22,7 +22,7 @@ RUN npm run build
 #     add that repo with its signing key.
 #   * The module package carries its own version suffix (e.g. 1.27.4+0.1.2-1~bookworm),
 #     so we resolve the build matching this image's ${NGINX_VERSION} instead of hardcoding
-#     it — bump the FROM tag and the right module follows automatically.
+#     it - bump the FROM tag and the right module follows automatically.
 #   * load_module is a MAIN-context directive and this image's nginx.conf has no
 #     modules-enabled include, so we prepend it to /etc/nginx/nginx.conf.
 #   * The image has no wget, so the healthcheck uses curl (kept; only gnupg is purged).

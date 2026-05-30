@@ -43,4 +43,4 @@ Thumbs.db
 # Claude Code (keep the shared kit tracked; ignore local-only settings)
 .claude/settings.local.json
 
-# Note: lockfiles (package-lock.json) are intentionally committed — do NOT ignore them.
+# Note: lockfiles (package-lock.json) are intentionally committed - do NOT ignore them.

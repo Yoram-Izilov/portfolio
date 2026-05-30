@@ -6,7 +6,7 @@
 #   docker compose logs -f
 #
 # It also joins the monitoring stack's network so nginx can ship OpenTelemetry spans to
-# `otel-collector`/`tempo`. Both networks are external — created by other repos:
+# `otel-collector`/`tempo`. Both networks are external - created by other repos:
 #   - proxy      -> nginx_nginx_network   (host reverse proxy; public routing)
 #   - monitoring -> monitoring_monitoring (observability; created by the monitoring stack)
 #

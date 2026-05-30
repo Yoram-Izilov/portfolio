@@ -1,4 +1,4 @@
-// Portfolio CI — builds and verifies the nginx image from the multi-stage Dockerfile.
+// Portfolio CI - builds and verifies the nginx image from the multi-stage Dockerfile.
 // Agent needs the Docker CLI + a usable Docker daemon. Node is NOT required on the agent
 // (lint/typecheck/build all run inside the image build).
 //
@@ -51,7 +51,7 @@ pipeline {
                     docker rm -f "$cname" >/dev/null 2>&1 || true
                     docker run -d --name "$cname" "$IMAGE"
                     # wait for nginx to come up, then assert it actually serves the hero
-                    # (image is Debian nginx — uses curl; there is no wget)
+                    # (image is Debian nginx - uses curl; there is no wget)
                     for i in $(seq 1 15); do
                         if docker exec "$cname" curl -fsS http://localhost/ >/dev/null 2>&1; then break; fi
                         sleep 1

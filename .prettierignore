@@ -8,6 +8,6 @@ bun.lockb
 # Miscellaneous
 /static/
 
-# Build-kit infrastructure (hand-authored instructions — don't reformat)
+# Build-kit infrastructure (hand-authored instructions - don't reformat)
 .claude/
 PORTFOLIO_PROMPT.md

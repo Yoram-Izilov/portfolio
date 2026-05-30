@@ -6,9 +6,9 @@
 	let { children } = $props();
 
 	const site = 'https://www.yoram-izilov.com';
-	const title = 'Yoram Izilov — DevOps Engineer';
+	const title = 'Yoram Izilov - DevOps Engineer';
 	const description =
-		'DevOps engineer building production AWS & Kubernetes infrastructure — observability and CI/CD, instrumented before it breaks.';
+		'DevOps engineer building production AWS & Kubernetes infrastructure - observability and CI/CD, instrumented before it breaks.';
 	const ogImage = `${site}/og.png`;
 
 	const jsonLd = JSON.stringify({
@@ -39,7 +39,7 @@
 	<meta property="og:image" content={ogImage} />
 	<meta property="og:image:width" content="1200" />
 	<meta property="og:image:height" content="630" />
-	<meta property="og:image:alt" content="Yoram Izilov — DevOps Engineer" />
+	<meta property="og:image:alt" content="Yoram Izilov - DevOps Engineer" />
 
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content={title} />

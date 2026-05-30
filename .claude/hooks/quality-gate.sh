@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# quality-gate.sh — runs lint / typecheck / build after edits to source files.
+# quality-gate.sh - runs lint / typecheck / build after edits to source files.
 # BLOCKING: exit 2 tells Claude Code the edit introduced a problem to fix.
 # Skips quietly when there's no package.json or no relevant script defined.
 
@@ -11,7 +11,7 @@ FILE="$(printf '%s' "$INPUT" | grep -oE '"file_path"[[:space:]]*:[[:space:]]*"[^
 # Only gate on source files; let everything else pass.
 case "${FILE:-}" in
   *.js|*.jsx|*.ts|*.tsx|*.svelte|*.astro|*.vue|*.css|*.scss) ;;
-  "") ;;  # no file in payload (manual run) — still run the gate
+  "") ;;  # no file in payload (manual run) - still run the gate
   *) exit 0 ;;
 esac
 
@@ -27,14 +27,14 @@ find_root() {
   return 1
 }
 
-ROOT="$(find_root)" || { echo "ℹ️  [quality-gate] No package.json found — skipping."; exit 0; }
+ROOT="$(find_root)" || { echo "ℹ️  [quality-gate] No package.json found - skipping."; exit 0; }
 cd "$ROOT" || exit 0
 
 # Pick a package manager.
 if   [[ -f pnpm-lock.yaml ]]; then PM="pnpm";       RUN="pnpm run";
 elif [[ -f yarn.lock ]];      then PM="yarn";       RUN="yarn";
 else                               PM="npm";        RUN="npm run"; fi
-command -v "$PM" >/dev/null 2>&1 || { echo "ℹ️  [quality-gate] $PM not installed — skipping."; exit 0; }
+command -v "$PM" >/dev/null 2>&1 || { echo "ℹ️  [quality-gate] $PM not installed - skipping."; exit 0; }
 
 has_script() { grep -qE "\"$1\"[[:space:]]*:" package.json 2>/dev/null; }
 
@@ -51,7 +51,7 @@ run_step() {
 # Run only the scripts that exist. Keep it fast: lint + typecheck always, build optional.
 has_script lint      && run_step "lint"      $RUN lint
 has_script typecheck && run_step "typecheck" $RUN typecheck
-# 'build' is the slow one — run it but allow opt-out via env.
+# 'build' is the slow one - run it but allow opt-out via env.
 if [[ "${QUALITY_GATE_SKIP_BUILD:-0}" != "1" ]] && has_script build; then
   run_step "build" $RUN build
 fi

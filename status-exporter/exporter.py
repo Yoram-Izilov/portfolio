@@ -7,7 +7,7 @@ the structured nginx access logs) on an interval and writes a flat, curated JSON
 file to a shared volume that the portfolio nginx serves at /status.json.
 
 Deliberately dependency-free (stdlib only) and deliberately *not* a proxy: only
-four curated fields ever leave this process — no IPs, no internal hostnames, no
+four curated fields ever leave this process - no IPs, no internal hostnames, no
 query passthrough. The upstream APIs are never exposed publicly.
 """
 
@@ -29,7 +29,7 @@ HTTP_TIMEOUT = float(os.environ.get("HTTP_TIMEOUT", "10"))
 PROBE_SUCCESS = 'probe_success{job="blackbox-portfolio"}'
 UPTIME_7D = 'avg_over_time(probe_success{job="blackbox-portfolio"}[7d]) * 100'
 
-# Unique visitors over 7d — the exact LogQL the Grafana dashboard's "7d" panel uses
+# Unique visitors over 7d - the exact LogQL the Grafana dashboard's "7d" panel uses
 # (count distinct remote_addr from the portfolio nginx JSON access logs in Loki).
 # Bounded by Loki's 7d retention, which is why we report a 7d window, not all-time.
 VISITORS_7D = (
@@ -68,7 +68,7 @@ def write_atomic(path: str, payload: dict) -> None:
     tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
         json.dump(payload, f)
-    os.replace(tmp, path)  # atomic — nginx never sees a half-written file
+    os.replace(tmp, path)  # atomic - nginx never sees a half-written file
 
 
 def poll(last: dict) -> dict:
@@ -79,7 +79,7 @@ def poll(last: dict) -> dict:
         probe = prom_query(PROBE_SUCCESS)
         if probe is not None:
             status = "operational" if probe >= 1 else "down"
-    except Exception as e:  # noqa: BLE001 — one bad source must not blank the rest
+    except Exception as e:  # noqa: BLE001 - one bad source must not blank the rest
         log(f"probe_success query failed: {e}")
 
     try:
@@ -113,7 +113,7 @@ def main() -> None:
             payload = poll(last)
             write_atomic(OUT_PATH, payload)
             log(f"wrote {payload}")
-        except Exception as e:  # noqa: BLE001 — keep the loop alive no matter what
+        except Exception as e:  # noqa: BLE001 - keep the loop alive no matter what
             log(f"poll cycle failed: {e}")
         time.sleep(POLL_SECONDS)
 

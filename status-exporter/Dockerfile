@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # Tiny dependency-free sidecar: polls Prometheus + Loki on the monitoring network and
-# writes a curated status.json to the shared `status` volume. stdlib only — no pip.
+# writes a curated status.json to the shared `status` volume. stdlib only - no pip.
 FROM python:3.13-alpine
 
 WORKDIR /app

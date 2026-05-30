@@ -1,6 +1,6 @@
 # Portfolio Build Kit (for Claude Code)
 
-A subagent team + hooks + a master prompt for building a **personal-brand portfolio that people remember** — with Claude Code doing the work and refusing to ship the generic AI look.
+A subagent team + hooks + a master prompt for building a **personal-brand portfolio that people remember** - with Claude Code doing the work and refusing to ship the generic AI look.
 
 ## What's in here
 
@@ -44,8 +44,8 @@ The orchestrator will pull in the other agents at the right moments. It will pau
 
 ## The hooks
 
-- **`no-generic-ai.sh`** — runs after every edit, _warns_ (never blocks) when it spots purple/indigo gradients, white glassmorphism, the cookie-cutter card shadow, default Inter, or leftover lorem ipsum. Exit 0 always.
-- **`quality-gate.sh`** — runs after edits to source files, _blocks_ (exit 2) if `lint`, `typecheck`, or `build` fail. It auto-detects pnpm/yarn/npm and skips any script you haven't defined, so wire those scripts up during scaffolding. Skip the slow build step with `QUALITY_GATE_SKIP_BUILD=1`.
+- **`no-generic-ai.sh`** - runs after every edit, _warns_ (never blocks) when it spots purple/indigo gradients, white glassmorphism, the cookie-cutter card shadow, default Inter, or leftover lorem ipsum. Exit 0 always.
+- **`quality-gate.sh`** - runs after edits to source files, _blocks_ (exit 2) if `lint`, `typecheck`, or `build` fail. It auto-detects pnpm/yarn/npm and skips any script you haven't defined, so wire those scripts up during scaffolding. Skip the slow build step with `QUALITY_GATE_SKIP_BUILD=1`.
 
 ## Notes
 

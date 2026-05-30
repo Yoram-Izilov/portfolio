@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# no-generic-ai.sh — warns when edited files contain "instant AI" design tells.
+# no-generic-ai.sh - warns when edited files contain "instant AI" design tells.
 # Non-blocking by design: it nudges, it doesn't halt. Exit 0 always.
 # Claude Code passes hook context as JSON on stdin; we read the edited file path from it.
 
@@ -23,7 +23,7 @@ scan() {
   local f="$1"
   [[ -f "$f" ]] || return 0
 
-  # Purple/blue/indigo gradient — the #1 AI tell.
+  # Purple/blue/indigo gradient - the #1 AI tell.
   if grep -niqE 'linear-gradient\([^)]*(purple|violet|indigo|#6[0-9a-f]{2}|#7[0-9a-f]{2}|#8[0-9a-f]{2})' "$f" 2>/dev/null; then
     HITS+=("$f: purple/blue/indigo gradient")
   fi
@@ -39,9 +39,9 @@ scan() {
     HITS+=("$f: cookie-cutter card shadow")
   fi
 
-  # Default Inter — flag for justification, not as an error.
+  # Default Inter - flag for justification, not as an error.
   if grep -niqE "font-family:[^;]*Inter" "$f" 2>/dev/null; then
-    HITS+=("$f: default Inter — is this a deliberate choice?")
+    HITS+=("$f: default Inter - is this a deliberate choice?")
   fi
 
   # Leftover placeholder text.

@@ -30,7 +30,7 @@
 		border-top: 1px solid var(--line);
 		/* Opaque var(--bg) base under the translucent tint so the home page's
 		   fixed InteractiveGrid doesn't show through the footer. The tint must be
-		   a gradient (image) layer — a bare color is only valid as the last layer. */
+		   a gradient (image) layer - a bare color is only valid as the last layer. */
 		background:
 			linear-gradient(
 				color-mix(in srgb, var(--bg-1) 70%, transparent),

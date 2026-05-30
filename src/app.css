@@ -117,7 +117,7 @@ a {
 	border: 0;
 }
 
-/* scroll reveal — applied by the `inview` action (see $lib/actions/inview.ts).
+/* scroll reveal - applied by the `inview` action (see $lib/actions/inview.ts).
    Default markup stays visible; these only kick in once JS opts the element in. */
 .reveal {
 	opacity: 0;
