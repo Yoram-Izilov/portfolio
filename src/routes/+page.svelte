@@ -119,7 +119,7 @@
 		<figure class="graph-wrap">
 			<PipelineGraph onSelect={handleSelect} activeId={selectedId} {progress} />
 			<figcaption class="caption mono">
-				the pipeline that ships this site · click a node to drill in
+				the pipeline that ships this site<span class="drill-hint"> · click a node to drill in</span>
 			</figcaption>
 		</figure>
 	</div>
@@ -253,6 +253,12 @@
 	@media (min-width: 980px) {
 		.caption {
 			text-align: right;
+		}
+	}
+
+	@media (max-width: 720px) {
+		.drill-hint {
+			display: none;
 		}
 	}
 </style>

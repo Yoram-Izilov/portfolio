@@ -57,13 +57,26 @@
 	const litStages = $derived(stages.map((_, i) => progress >= i * 0.15));
 	const liveLit = $derived(progress >= 0.62);
 	const hubLit = $derived(progress >= 0.76);
+
+	// Below 720px the SVG is too small for legible labels or 44px tap targets, so it
+	// becomes a decorative backdrop and the project list (below) carries the interaction.
+	let isMobile = $state(false);
+	$effect(() => {
+		const mq = window.matchMedia('(max-width: 720px)');
+		const sync = () => (isMobile = mq.matches);
+		sync();
+		mq.addEventListener('change', sync);
+		return () => mq.removeEventListener('change', sync);
+	});
 </script>
 
 <svg
 	class="graph"
+	class:decorative={isMobile}
 	viewBox="0 0 1000 540"
 	role="img"
 	aria-labelledby="graph-title graph-desc"
+	aria-hidden={isMobile ? 'true' : undefined}
 	preserveAspectRatio="xMidYMid meet"
 >
 	<title id="graph-title">Yoram Izilov's delivery pipeline</title>
@@ -120,7 +133,7 @@
 			class:active={activeId === p.id}
 			class:dimmed={activeId !== null && activeId !== p.id}
 			role="button"
-			tabindex="0"
+			tabindex={isMobile ? -1 : 0}
 			aria-label="Open details for {p.label}"
 			style="--d: {0.6 + i * 0.08}s"
 			onclick={(e) => onSelect(p.id, e.currentTarget)}
@@ -132,6 +145,26 @@
 		</g>
 	{/each}
 </svg>
+
+<!-- Mobile interaction: real ≥44px tappable targets; the SVG above is decorative ≤720px -->
+<ul class="project-list" aria-label="Projects">
+	{#each projects as p (p.id)}
+		<li>
+			<button
+				type="button"
+				class="project-item"
+				class:active={activeId === p.id}
+				onclick={(e) => onSelect(p.id, e.currentTarget)}
+			>
+				<span class="pi-text">
+					<span class="pi-label">{p.label}</span>
+					<span class="pi-sub">{p.sub}</span>
+				</span>
+				<span class="pi-arrow" aria-hidden="true">→</span>
+			</button>
+		</li>
+	{/each}
+</ul>
 
 <style>
 	.graph {
@@ -361,5 +394,83 @@
 		.live-pulse {
 			display: none;
 		}
+	}
+
+	/* ≤720px: the SVG is a decorative backdrop — disable the in-SVG project nodes (the
+	   list below is the real interface) and bump label sizes so the diagram stays legible. */
+	.graph.decorative .project {
+		pointer-events: none;
+		cursor: default;
+	}
+
+	/* Mobile project list: real ≥44px tappable targets, hidden on desktop. */
+	.project-list {
+		display: none;
+	}
+	@media (max-width: 720px) {
+		.graph .label {
+			font-size: 22px;
+		}
+		.graph .proj-label {
+			font-size: 21px;
+		}
+		.graph .proj-sub {
+			font-size: 15px;
+		}
+		.graph .hub-sub {
+			font-size: 16px;
+		}
+
+		.project-list {
+			display: flex;
+			flex-direction: column;
+			gap: 0.5rem;
+			list-style: none;
+			margin: 1rem 0 0;
+			padding: 0;
+		}
+	}
+
+	.project-item {
+		width: 100%;
+		min-height: 48px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+		padding: 0.7rem 0.9rem;
+		background: var(--bg-2);
+		border: 1px solid var(--line);
+		border-radius: 11px;
+		color: var(--fg);
+		font-family: var(--font-mono);
+		text-align: left;
+		cursor: pointer;
+		transition:
+			border-color 0.2s ease,
+			background 0.2s ease;
+	}
+	.project-item:hover,
+	.project-item:focus-visible,
+	.project-item.active {
+		border-color: var(--cyan);
+		background: #182433;
+		outline: none;
+	}
+	.pi-text {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+	}
+	.pi-label {
+		font-size: 0.95rem;
+	}
+	.pi-sub {
+		font-size: 0.78rem;
+		color: var(--fg-faint);
+	}
+	.pi-arrow {
+		color: var(--cyan);
+		font-size: 1.1rem;
 	}
 </style>
