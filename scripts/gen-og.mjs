@@ -1,4 +1,4 @@
-// Generates static/og.png (1200x630) — the social link-preview card.
+// Generates static/og.png (1200x630) - the social link-preview card.
 // One-off asset generator; the PNG is committed, so this isn't a build/CI dep.
 //   npm i -D @resvg/resvg-js && node scripts/gen-og.mjs
 import { Resvg } from '@resvg/resvg-js';
@@ -42,7 +42,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
   <text x="92" y="262" font-family="Consolas, monospace" font-size="24" letter-spacing="6" fill="#4fe3d4">DEVOPS ENGINEER</text>
   <text x="88" y="372" font-family="Arial, 'Segoe UI', sans-serif" font-size="120" font-weight="700" letter-spacing="-3" fill="#e9eff6">Yoram Izilov</text>
 
-  <text x="92" y="452" font-family="Arial, 'Segoe UI', sans-serif" font-size="30" fill="#aab6c5">Production AWS &amp; Kubernetes infrastructure —</text>
+  <text x="92" y="452" font-family="Arial, 'Segoe UI', sans-serif" font-size="30" fill="#aab6c5">Production AWS &amp; Kubernetes infrastructure -</text>
   <text x="92" y="494" font-family="Arial, 'Segoe UI', sans-serif" font-size="30" fill="#aab6c5">observability &amp; CI/CD, instrumented before it breaks.</text>
 
   <text x="92" y="556" font-family="Consolas, monospace" font-size="20" letter-spacing="1" fill="#6a778a">www.yoram-izilov.com</text>

@@ -9,7 +9,7 @@
 	let selectedId = $state<string | null>(null);
 	let originRect = $state<DOMRect | null>(null);
 
-	// 0..1 — drives the hero pipeline's light-up illumination.
+	// 0..1 - drives the hero pipeline's light-up illumination.
 	// Starts dormant; tweened to 1 on mount (see onMount). Reduced-motion / no-JS
 	// fall back to fully lit.
 	let progress = $state(0);
@@ -20,7 +20,7 @@
 
 	const selected = $derived(projects.find((p) => p.id === selectedId) ?? null);
 
-	// Live status badge — hydrated from /status.json (written by the status-exporter
+	// Live status badge - hydrated from /status.json (written by the status-exporter
 	// sidecar from the monitoring stack). Stays null during prerender / no-JS, so the
 	// markup below renders the static green "OPERATIONAL" fallback untouched.
 	type SiteStatus = {
@@ -52,7 +52,7 @@
 	}
 
 	onMount(() => {
-		// Hydrate the live status badge — independent of the motion setup below, and
+		// Hydrate the live status badge - independent of the motion setup below, and
 		// placed before the reduced-motion early-return so it always runs.
 		fetch('/status.json', { cache: 'no-store' })
 			.then((r) => (r.ok ? r.json() : null))
@@ -60,7 +60,7 @@
 				if (d) live = d;
 			})
 			.catch(() => {
-				/* network/parse error — leave the static OPERATIONAL fallback in place */
+				/* network/parse error - leave the static OPERATIONAL fallback in place */
 			});
 
 		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -70,7 +70,7 @@
 
 		let cancelled = false;
 
-		// Light up the pipeline as a staggered entrance on load — no scroll, no pin.
+		// Light up the pipeline as a staggered entrance on load - no scroll, no pin.
 		// The tween ramps `progress` 0→1; PipelineGraph's per-stage thresholds
 		// (0/0.15/0.30/0.45 → 0.62 → 0.76) turn that even ramp into a commit→…→hub cascade.
 		import('gsap').then(({ gsap }) => {
@@ -111,7 +111,7 @@
 			<p class="eyebrow mono">DevOps Engineer</p>
 			<h1>Yoram Izilov</h1>
 			<p class="tagline">
-				I build production infrastructure on <strong>AWS</strong> and <strong>Kubernetes</strong> — the
+				I build production infrastructure on <strong>AWS</strong> and <strong>Kubernetes</strong> - the
 				observability and CI/CD that keep it boring. Instrumented before it breaks.
 			</p>
 		</header>
@@ -188,7 +188,7 @@
 		align-self: flex-start;
 	}
 
-	/* Degraded / stale health — amber, so green stays meaningful as "healthy". */
+	/* Degraded / stale health - amber, so green stays meaningful as "healthy". */
 	.status.degraded {
 		color: var(--amber);
 		border-color: color-mix(in srgb, var(--amber) 35%, transparent);
@@ -199,7 +199,7 @@
 		box-shadow: 0 0 8px var(--amber);
 	}
 
-	/* Visitor count — understated cyan, distinct from the health badge. */
+	/* Visitor count - understated cyan, distinct from the health badge. */
 	.visitors {
 		color: var(--fg-dim);
 		border-color: color-mix(in srgb, var(--cyan) 30%, transparent);

@@ -3,7 +3,7 @@ export type CaseStudy = {
 	slug: string;
 	/** page <h1> + <title> */
 	title: string;
-	/** one-line deck — also the page meta description */
+	/** one-line deck - also the page meta description */
 	summary: string;
 	role: string;
 	stack: string[];
@@ -22,7 +22,7 @@ export const caseStudies: Record<string, CaseStudy> = {
 		slug: 'home-server',
 		title: 'home-server: the box that runs this site',
 		summary:
-			'A self-hosted observability and reverse-proxy platform — three independent repos, two Docker networks as contracts, every service instrumented and self-deploying. It also serves the page you are reading.',
+			'A self-hosted observability and reverse-proxy platform - three independent repos, two Docker networks as contracts, every service instrumented and self-deploying. It also serves the page you are reading.',
 		role: 'Designed & operate the infrastructure',
 		stack: ['nginx', 'Docker Compose', 'Jenkins', 'Prometheus', 'Grafana', 'Loki', 'Tempo'],
 		repo: {
@@ -35,7 +35,7 @@ export const caseStudies: Record<string, CaseStudy> = {
 		slug: 'discord-bot',
 		title: 'discord-bot: a hobby bot run like production',
 		summary:
-			'A personal Python Discord bot instrumented end-to-end — every function traced to Tempo, continuously profiled by Pyroscope, metrics scraped into Prometheus, logs shipped to Loki, all rendered in Grafana. A hobby project used to practise the observability discipline I run at work.',
+			'A personal Python Discord bot instrumented end-to-end - every function traced to Tempo, continuously profiled by Pyroscope, metrics scraped into Prometheus, logs shipped to Loki, all rendered in Grafana. A hobby project used to practise the observability discipline I run at work.',
 		role: 'Built with a friend',
 		stack: [
 			'Python',

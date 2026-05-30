@@ -76,7 +76,7 @@
 	}
 
 	// Navigating to the case study while this modal <dialog> is still open leaves the
-	// page inert (frozen, unscrollable) until a reload — the dialog stays in the top
+	// page inert (frozen, unscrollable) until a reload - the dialog stays in the top
 	// layer through the client-side navigation. So close it first, then navigate.
 	// Modified/non-primary clicks fall through to the link's native behaviour (new tab).
 	function openCaseStudy(e: MouseEvent, href: Pathname) {
@@ -276,7 +276,7 @@
 		gap: 0.7rem 1.25rem;
 	}
 
-	/* primary action — present only when the project has a deep-dive write-up */
+	/* primary action - present only when the project has a deep-dive write-up */
 	.case-study {
 		display: inline-flex;
 		align-items: center;

@@ -1,4 +1,4 @@
-<!-- Keep PRs as small vertical slices. Concept: "The Pipeline" — every change should ladder up to it. -->
+<!-- Keep PRs as small vertical slices. Concept: "The Pipeline" - every change should ladder up to it. -->
 
 ## Summary
 
@@ -13,7 +13,7 @@
 - [ ] `npm run lint` passes
 - [ ] `npm run typecheck` passes
 - [ ] `npm run build` passes
-- [ ] Verified in the browser — golden path + key edge cases
+- [ ] Verified in the browser - golden path + key edge cases
 - [ ] Responsive 320px → ultrawide
 - [ ] `prefers-reduced-motion` honored; keyboard-navigable; visible focus states
 

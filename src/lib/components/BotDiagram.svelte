@@ -3,15 +3,15 @@
 	// ArchitectureDiagram: dark nodes, cyan/green signal colour, mono labels.
 	// The request path runs top-to-bottom on the left spine
 	// (Discord → bot.py → functions/ → Postgres). Every function is wrapped by
-	// @trace_function, so the bot process emits traces and profiles together — they
+	// @trace_function, so the bot process emits traces and profiles together - they
 	// leave bot.py and enter the observability stack, grouped inside the bordered
 	// monitoring_monitoring panel on the right. The bot and Postgres write logs to
 	// stdout; a promtail sidecar scrapes the containers' stdout and ships it to Loki. The bot
 	// itself exposes no Prometheus metrics: the only metrics come from the
 	// postgres-exporter sidecar, which Prometheus scrapes. Grafana reads all four
-	// signals (traces, logs, profiles, metrics) — the single pane of glass.
+	// signals (traces, logs, profiles, metrics) - the single pane of glass.
 	//
-	// Deliberately free of tokens / real IDs — curated surface only.
+	// Deliberately free of tokens / real IDs - curated surface only.
 
 	// One packet per edge. Cyan rides the request path down the left spine;
 	// green rides every telemetry edge. Staggered delays make the first pass
@@ -278,7 +278,7 @@
 		letter-spacing: 0.04em;
 	}
 
-	/* bot.py is the entry point — cyan edge */
+	/* bot.py is the entry point - cyan edge */
 	.entry rect {
 		stroke: color-mix(in srgb, var(--cyan) 55%, var(--line));
 		fill: #131d2b;
@@ -287,7 +287,7 @@
 	.obs rect {
 		stroke: color-mix(in srgb, var(--green) 45%, var(--line));
 	}
-	/* Grafana is the single pane of glass — slightly brighter */
+	/* Grafana is the single pane of glass - slightly brighter */
 	.grafana rect {
 		stroke: color-mix(in srgb, var(--green) 65%, var(--line));
 		fill: #10201a;
@@ -304,7 +304,7 @@
 		transform-origin: center;
 	}
 
-	/* entrance — only when motion is welcome; default state is fully visible.
+	/* entrance - only when motion is welcome; default state is fully visible.
 	   Each element carries its own --d so the diagram unfurls top-to-bottom. */
 	@media (prefers-reduced-motion: no-preference) {
 		.node,

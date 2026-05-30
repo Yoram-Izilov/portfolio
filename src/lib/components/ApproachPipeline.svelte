@@ -13,13 +13,13 @@
 		{
 			tag: 'SOURCE',
 			title: 'I started on the other side of the deploy.',
-			body: 'I came up writing full-stack applications, then moved to the infrastructure that runs them. I build for developers because I was one — the ergonomics matter.',
+			body: 'I came up writing full-stack applications, then moved to the infrastructure that runs them. I build for developers because I was one - the ergonomics matter.',
 			tech: ['Full-stack roots', 'DevOps']
 		},
 		{
 			tag: 'BUILD',
 			title: 'Production infrastructure on AWS and Kubernetes.',
-			body: 'I design and run workloads on AWS and EKS — the kind of systems that are supposed to be boring, because boring means they are working.',
+			body: 'I design and run workloads on AWS and EKS - the kind of systems that are supposed to be boring, because boring means they are working.',
 			tech: ['AWS', 'EKS', 'Kubernetes', 'Docker']
 		},
 		{
@@ -31,7 +31,7 @@
 		{
 			tag: 'SHIP',
 			title: 'Everything ships through a pipeline.',
-			body: 'CI/CD with Jenkins and Bitbucket Pipelines — including this site, which builds, tests and deploys itself on every push.',
+			body: 'CI/CD with Jenkins and Bitbucket Pipelines - including this site, which builds, tests and deploys itself on every push.',
 			tech: ['Jenkins', 'Bitbucket Pipelines', 'CI/CD'],
 			live: true
 		}

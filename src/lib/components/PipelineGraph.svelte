@@ -2,7 +2,7 @@
 	import { projects } from '$lib/data/projects';
 
 	type Stage = { id: string; label: string; x: number };
-	/** `at` = scroll progress at which this edge's packet becomes visible — matches its SOURCE
+	/** `at` = scroll progress at which this edge's packet becomes visible - matches its SOURCE
 	    stage lighting up, so flow leaves a stage the moment it goes active. */
 	type Edge = { id: string; d: string; dur: number; delay: number; at: number };
 
@@ -82,7 +82,7 @@
 	<title id="graph-title">Yoram Izilov's delivery pipeline</title>
 	<desc id="graph-desc">
 		An infrastructure diagram: a CI/CD pipeline runs commit, build, test and deploy into a live
-		endpoint and a control plane operated by Yoram, which branches to three projects — a Discord bot
+		endpoint and a control plane operated by Yoram, which branches to three projects - a Discord bot
 		with full observability, the home-server infrastructure and monitoring stack, and this site.
 	</desc>
 
@@ -91,7 +91,7 @@
 		<path class="edge" d={e.d} />
 	{/each}
 
-	<!-- flowing packets — each appears only once its segment of the pipeline is reached -->
+	<!-- flowing packets - each appears only once its segment of the pipeline is reached -->
 	<g class="packets">
 		{#each edges as e (e.id)}
 			<circle
@@ -234,7 +234,7 @@
 		fill: var(--fg);
 	}
 
-	/* LIVE — dormant until the pipeline reaches it, then goes green and pulses */
+	/* LIVE - dormant until the pipeline reaches it, then goes green and pulses */
 	.live rect {
 		fill: var(--bg-2);
 		stroke: var(--line);
@@ -286,7 +286,7 @@
 		}
 	}
 
-	/* hub — control plane comes online once the pipeline has run */
+	/* hub - control plane comes online once the pipeline has run */
 	.hub rect {
 		fill: var(--bg-1);
 		stroke: var(--line);
@@ -359,7 +359,7 @@
 		outline: none;
 	}
 
-	/* entrance — only when motion is welcome; default state is fully visible */
+	/* entrance - only when motion is welcome; default state is fully visible */
 	@media (prefers-reduced-motion: no-preference) {
 		.node,
 		.edge {
@@ -396,7 +396,7 @@
 		}
 	}
 
-	/* ≤720px: the SVG is a decorative backdrop — disable the in-SVG project nodes (the
+	/* ≤720px: the SVG is a decorative backdrop - disable the in-SVG project nodes (the
 	   list below is the real interface) and bump label sizes so the diagram stays legible. */
 	.graph.decorative .project {
 		pointer-events: none;

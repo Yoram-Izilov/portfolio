@@ -31,7 +31,7 @@ export const projects: Project[] = [
 		points: [
 			'Prometheus metrics across commands and the runtime hot path',
 			'Grafana dashboards and alerting on the bot’s own health',
-			'The same observe-before-it-breaks pattern I run in production — in miniature'
+			'The same observe-before-it-breaks pattern I run in production - in miniature'
 		],
 		repo: {
 			label: 'github.com/yoram-izilov/discord-py',
@@ -45,13 +45,13 @@ export const projects: Project[] = [
 		sub: 'observability + infra',
 		x: 500,
 		tagline:
-			'The infrastructure control repo behind this box — a self-hosted observability stack and reverse-proxy layer.',
+			'The infrastructure control repo behind this box - a self-hosted observability stack and reverse-proxy layer.',
 		stack: ['Prometheus', 'Grafana', 'Loki'],
 		role: 'Designed & operate the infrastructure',
 		points: [
 			'Self-hosted observability: Prometheus metrics, Grafana dashboards, Tempo traces and Loki logs',
 			'Host nginx reverse proxy routing every service on the box by container name',
-			'Each app self-deploys via Jenkins on the same host — secrets from credentials, never committed'
+			'Each app self-deploys via Jenkins on the same host - secrets from credentials, never committed'
 		],
 		repo: {
 			label: 'github.com/yoram-izilov/home-server',
@@ -64,7 +64,7 @@ export const projects: Project[] = [
 		label: 'this-site',
 		sub: "you're in it",
 		x: 750,
-		tagline: 'The site you’re reading — and a project in its own right.',
+		tagline: 'The site you’re reading - and a project in its own right.',
 		stack: ['SvelteKit', 'TypeScript', 'GitHub Actions'],
 		role: 'Designed, built, shipped',
 		points: [

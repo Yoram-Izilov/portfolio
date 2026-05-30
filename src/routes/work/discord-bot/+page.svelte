@@ -21,12 +21,12 @@
 </script>
 
 <svelte:head>
-	<title>{cs.title} — Yoram Izilov</title>
+	<title>{cs.title} - Yoram Izilov</title>
 	<meta name="description" content={cs.summary} />
 	<link rel="canonical" href={url} />
 	<meta property="og:type" content="article" />
 	<meta property="og:url" content={url} />
-	<meta property="og:title" content="{cs.title} — Yoram Izilov" />
+	<meta property="og:title" content="{cs.title} - Yoram Izilov" />
 	<meta property="og:description" content={cs.summary} />
 	<!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted static JSON-LD -->
 	{@html `<script type="application/ld+json">${jsonLd}</` + `script>`}
@@ -64,14 +64,14 @@
 		<section class="block" use:inview>
 			<h2><span class="mono num">01</span> A hobby bot, run like production</h2>
 			<p>
-				<strong>discord-bot</strong> is a personal Python bot for my server — it tracks airing anime,
+				<strong>discord-bot</strong> is a personal Python bot for my server - it tracks airing anime,
 				watches RSS feeds, scrapes MyAnimeList, runs roulettes and plays voice. None of that is the interesting
 				part. The interesting part is that I run it with the same operational discipline I apply to production
 				systems at work: every code path is traced, profiled and alerting-ready, with all state in a real
 				database.
 			</p>
 			<p>
-				It's a deliberately low-stakes place to practise observability end to end — to feel what
+				It's a deliberately low-stakes place to practise observability end to end - to feel what
 				good instrumentation costs to write and what it buys you when something misbehaves at 2am,
 				without a production incident to learn it on.
 			</p>
@@ -83,7 +83,7 @@
 			<p>
 				<span class="mono">bot.py</span> is a thin entry point: it registers the slash commands,
 				sets up OpenTelemetry and Pyroscope, and bootstraps the database pool on
-				<span class="mono">on_ready</span>. Command bodies don't live there — each is a thin wrapper
+				<span class="mono">on_ready</span>. Command bodies don't live there - each is a thin wrapper
 				that delegates to a handler in <span class="mono">functions/</span>. All state lives in
 				<strong>Postgres</strong>, reached through a single asyncpg pool in
 				<span class="mono">utils/db.py</span>; handlers never touch the pool directly, they call
@@ -101,7 +101,7 @@
 			<p>
 				The single most important pattern is the <code>@trace_function</code> decorator: every function,
 				sync or async, is wrapped in an OpenTelemetry span. There is no "should I instrument this?" decision
-				— instrumentation is the default, and a function without the decorator is the exception that stands
+				- instrumentation is the default, and a function without the decorator is the exception that stands
 				out in review.
 			</p>
 		</section>
@@ -113,14 +113,14 @@
 				<li>
 					<span class="d-title mono">Traces to Tempo, by default.</span>
 					Every function emits a span via <code>@trace_function</code>, so a slow command shows up
-					as a flame of nested spans in Tempo — the Selenium MAL scrape, the asyncpg query, the HTTP
-					call — with no guessing about where the time went.
+					as a flame of nested spans in Tempo - the Selenium MAL scrape, the asyncpg query, the HTTP
+					call - with no guessing about where the time went.
 				</li>
 				<li>
 					<span class="d-title mono">Continuous profiling with Pyroscope.</span>
 					Profiling runs with <span class="mono">oncpu=False</span> so it captures blocking I/O (the
 					Discord websocket, HTTP, Selenium) and <span class="mono">gil_only=False</span> so native
-					threads — ffmpeg, the chromium driver — show up too. Traces tell you <em>which</em> call
+					threads - ffmpeg, the chromium driver - show up too. Traces tell you <em>which</em> call
 					was slow; profiles tell you
 					<em>what it was doing</em>.
 				</li>
@@ -135,12 +135,12 @@
 					The bot and Postgres log to stdout; a <span class="mono">promtail</span> sidecar scrapes
 					the containers' logs off the Docker socket and ships them to
 					<span class="mono">Loki</span>, so Grafana queries them next to the traces, profiles and
-					metrics — the fourth signal in the same pane of glass.
+					metrics - the fourth signal in the same pane of glass.
 				</li>
 				<li>
 					<span class="d-title mono">A debug switch for local dev.</span>
 					Setting <code>debug: true</code> never sets up the tracer or profiler and skips the background
-					tasks — so I can run the bot against a local Postgres without exporting telemetry to nowhere
+					tasks - so I can run the bot against a local Postgres without exporting telemetry to nowhere
 					or hammering external feeds.
 				</li>
 				<li>
@@ -148,7 +148,7 @@
 					The bot deploys via its own Jenkinsfile with
 					<span class="mono">docker compose up -d</span>; the token comes from a gitignored local
 					config or Jenkins credentials, never committed, and every image is pinned to an explicit
-					tag — no <code>:latest</code>.
+					tag - no <code>:latest</code>.
 				</li>
 			</ul>
 		</section>
@@ -157,8 +157,8 @@
 		<section class="block" use:inview>
 			<h2><span class="mono num">04</span> What it proves</h2>
 			<p>
-				It's the same observe-before-it-breaks pattern I run on production AWS and Kubernetes —
-				traces, logs, profiles, metrics and alerting wired in from the start — at the scale of one
+				It's the same observe-before-it-breaks pattern I run on production AWS and Kubernetes -
+				traces, logs, profiles, metrics and alerting wired in from the start - at the scale of one
 				hobby bot. The bot attaches to the same <span class="mono">monitoring_monitoring</span> network
 				as everything else on the box, so it shares the home-server observability stack rather than reinventing
 				one. Instrumentation isn't a thing I add when something breaks; it's the default the code is written

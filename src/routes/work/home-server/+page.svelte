@@ -10,7 +10,7 @@
 	const site = 'https://www.yoram-izilov.com';
 	const url = `${site}/work/home-server`;
 
-	// Live health of the very box this case study describes — hydrated from /status.json
+	// Live health of the very box this case study describes - hydrated from /status.json
 	// (written by the status-exporter sidecar). Mirrors the homepage logic: stays null
 	// during prerender / no-JS so the static fallback below renders untouched.
 	type SiteStatus = {
@@ -50,12 +50,12 @@
 </script>
 
 <svelte:head>
-	<title>{cs.title} — Yoram Izilov</title>
+	<title>{cs.title} - Yoram Izilov</title>
 	<meta name="description" content={cs.summary} />
 	<link rel="canonical" href={url} />
 	<meta property="og:type" content="article" />
 	<meta property="og:url" content={url} />
-	<meta property="og:title" content="{cs.title} — Yoram Izilov" />
+	<meta property="og:title" content="{cs.title} - Yoram Izilov" />
 	<meta property="og:description" content={cs.summary} />
 	<!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted static JSON-LD -->
 	{@html `<script type="application/ld+json">${jsonLd}</` + `script>`}
@@ -99,14 +99,14 @@
 		<section class="block" use:inview>
 			<h2><span class="mono num">01</span> Why self-host</h2>
 			<p>
-				I wanted a single box I fully own — somewhere to run my own services and, more importantly,
+				I wanted a single box I fully own - somewhere to run my own services and, more importantly,
 				to practise the operational discipline I apply at work without a cloud bill metering every
 				experiment. The brief I set myself: every service publicly reachable over TLS, every service
 				observable before it breaks, and every deploy reproducible from a commit. No pets, no manual
 				SSH-and-fix.
 			</p>
 			<p>
-				The result is <strong>home-server</strong> — the infrastructure control repo for the box at
+				The result is <strong>home-server</strong> - the infrastructure control repo for the box at
 				<span class="mono">yoram-izilov.com</span>. It owns the monitoring stack and the host
 				reverse-proxy layer; the applications living on the box (this site, a Discord bot) deploy
 				themselves against the contracts it defines.
@@ -117,7 +117,7 @@
 		<section class="block" use:inview>
 			<h2><span class="mono num">02</span> Architecture</h2>
 			<p>
-				Three independent git repos sit side by side on the host — the infrastructure repo, the
+				Three independent git repos sit side by side on the host - the infrastructure repo, the
 				Discord bot, and this site. They never import each other. What keeps them working together
 				is two <strong>external Docker networks</strong>, each a deliberate contract that the
 				infrastructure repo owns and the apps attach to.
@@ -133,7 +133,7 @@
 
 			<p>
 				<strong class="cyan">nginx_nginx_network</strong> is the public path. The host nginx reverse
-				proxy terminates TLS and routes each hostname to a container <em>by name</em> —
+				proxy terminates TLS and routes each hostname to a container <em>by name</em> -
 				<span class="mono">www.yoram-izilov.com</span> resolves to the
 				<span class="mono">portfolio</span> container's nginx on port 80; the apex redirects to
 				<span class="mono">www</span>. A new public service just joins this network and picks a
@@ -143,7 +143,7 @@
 				<strong class="green">monitoring_monitoring</strong> is the observability plane. Every container
 				that needs to be watched attaches to it: the bot exports OpenTelemetry traces to Tempo, Prometheus
 				scrapes exporters across it, and nginx's structured logs land in Loki. Grafana sits on top. A
-				service that needs both reach and observability simply joins both networks — that is the entire
+				service that needs both reach and observability simply joins both networks - that is the entire
 				integration surface between repos.
 			</p>
 		</section>
@@ -154,7 +154,7 @@
 			<ul class="decisions">
 				<li>
 					<span class="d-title mono">Networks as the contract.</span>
-					The repos coordinate through two named networks and container names — nothing else. It's a silent
+					The repos coordinate through two named networks and container names - nothing else. It's a silent
 					dependency by design: rename a network and a service detaches with no error, so the names are
 					treated as a frozen interface and documented as such.
 				</li>
@@ -166,13 +166,13 @@
 				<li>
 					<span class="d-title mono">Secrets from credentials, never committed.</span>
 					Each repo has its own Jenkinsfile; Jenkins and the Docker daemon share the host. Secrets are
-					injected from Jenkins credentials at deploy time — a pre-commit hook blocks staging them, and
+					injected from Jenkins credentials at deploy time - a pre-commit hook blocks staging them, and
 					nothing sensitive ever lands in git.
 				</li>
 				<li>
 					<span class="d-title mono">A dependency-free status sidecar.</span>
 					The live badge on my homepage is driven by a small Python sidecar that polls Prometheus and
-					Loki and writes a curated <span class="mono">status.json</span> — exactly four fields: health,
+					Loki and writes a curated <span class="mono">status.json</span> - exactly four fields: health,
 					7-day uptime, 7-day unique visitors, and a timestamp. Standard library only, no public metrics
 					endpoint, no internal hostnames or IPs leaving the box. The frontend fetches that file and treats
 					anything older than two poll intervals as stale.
@@ -184,11 +184,11 @@
 		<section class="block" use:inview>
 			<h2><span class="mono num">04</span> What it proves</h2>
 			<p>
-				The badge in this page header isn't decoration — it's this box reporting its own health,
+				The badge in this page header isn't decoration - it's this box reporting its own health,
 				served by the very infrastructure described above. Each app self-deploys with
 				<span class="mono">docker compose up -d</span> on its <span class="mono">main</span> branch through
 				its own Jenkins pipeline; the monitoring stack deploys the same way. It's the same observe-before-it-breaks
-				pattern I run on production AWS and Kubernetes — at the scale of one honest box, with nothing
+				pattern I run on production AWS and Kubernetes - at the scale of one honest box, with nothing
 				hidden.
 			</p>
 

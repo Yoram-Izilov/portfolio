@@ -23,7 +23,7 @@
 			cy += (ty - cy) * EASE;
 			root.style.setProperty('--mx', `${cx}px`);
 			root.style.setProperty('--my', `${cy}px`);
-			// Settled on the cursor — stop the loop until the next move.
+			// Settled on the cursor - stop the loop until the next move.
 			if (Math.abs(tx - cx) < 0.5 && Math.abs(ty - cy) < 0.5) {
 				frame = 0;
 				return;
@@ -71,7 +71,7 @@
 		pointer-events: none;
 	}
 
-	/* base blueprint grid — always visible, faded at the viewport edges */
+	/* base blueprint grid - always visible, faded at the viewport edges */
 	.grid-bg::before,
 	.grid-bg::after {
 		content: '';
@@ -85,7 +85,7 @@
 		mask-image: radial-gradient(130% 110% at 50% 0%, #000 35%, transparent 85%);
 	}
 
-	/* glow grid — same lines, brighter, revealed only near the cursor */
+	/* glow grid - same lines, brighter, revealed only near the cursor */
 	.grid-bg::after {
 		background-image:
 			linear-gradient(rgba(79, 227, 212, 0.35) 1px, transparent 1px),

@@ -1,11 +1,11 @@
 <script lang="ts">
 	// Blueprint topology of the home-server box, in the same visual idiom as the hero
 	// PipelineGraph: dark nodes, cyan/green signal colour, mono labels. The two Docker
-	// networks are drawn as labelled rails — the "contracts" the repos attach to. One
+	// networks are drawn as labelled rails - the "contracts" the repos attach to. One
 	// packet flows the public request path (visitors → nginx → portfolio) and a dashed
 	// return carries status.json back, echoing the hero's flow motif without repeating it.
 	//
-	// Deliberately free of real internal IPs / hostnames — same discipline as the
+	// Deliberately free of real internal IPs / hostnames - same discipline as the
 	// status-exporter (curated surface only).
 
 	// A signal descending the full path, top to bottom: visitors → nginx → the
@@ -34,7 +34,7 @@
 		Visitor traffic enters the host nginx reverse proxy and is routed over the nginx_nginx_network
 		to the portfolio and Discord-bot containers by container name. Both containers attach to a
 		second network, monitoring_monitoring, that carries metrics, logs and traces into the monitoring
-		stack — Prometheus, Grafana, Loki and Tempo. A status-exporter sidecar reads that stack and
+		stack - Prometheus, Grafana, Loki and Tempo. A status-exporter sidecar reads that stack and
 		writes a curated status.json back into the portfolio container. Jenkins deploys each service on
 		the main branch.
 	</desc>
@@ -228,7 +228,7 @@
 		dominant-baseline: middle;
 	}
 
-	/* nginx is the entry point — cyan edge */
+	/* nginx is the entry point - cyan edge */
 	.nginx rect {
 		stroke: color-mix(in srgb, var(--cyan) 55%, var(--line));
 		fill: #131d2b;
@@ -249,7 +249,7 @@
 		transform-origin: center;
 	}
 
-	/* entrance — only when motion is welcome; default state is fully visible.
+	/* entrance - only when motion is welcome; default state is fully visible.
 	   Every element carries its own --d so the diagram unfurls in vertical order,
 	   top (visitors) to bottom (monitoring stack), rather than all at once. */
 	@media (prefers-reduced-motion: no-preference) {
