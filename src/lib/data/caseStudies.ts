@@ -30,5 +30,27 @@ export const caseStudies: Record<string, CaseStudy> = {
 			href: 'https://github.com/yoram-izilov/home-server'
 		},
 		projectId: 'home-server'
+	},
+	'discord-bot': {
+		slug: 'discord-bot',
+		title: 'discord-bot: a hobby bot run like production',
+		summary:
+			'A personal Python Discord bot instrumented end-to-end — every function traced to Tempo, continuously profiled by Pyroscope, metrics scraped into Prometheus and Grafana. A hobby project used to practise the observability discipline I run at work.',
+		role: 'Solo build',
+		stack: [
+			'Python',
+			'discord.py',
+			'PostgreSQL',
+			'OpenTelemetry',
+			'Tempo',
+			'Pyroscope',
+			'Prometheus',
+			'Grafana'
+		],
+		repo: {
+			label: 'github.com/yoram-izilov/discord-py',
+			href: 'https://github.com/yoram-izilov/discord-py'
+		},
+		projectId: 'discord'
 	}
 };

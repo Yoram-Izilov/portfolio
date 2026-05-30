@@ -36,7 +36,8 @@ export const projects: Project[] = [
 		repo: {
 			label: 'github.com/yoram-izilov/discord-py',
 			href: 'https://github.com/yoram-izilov/discord-py'
-		}
+		},
+		caseStudy: '/work/discord-bot'
 	},
 	{
 		id: 'home-server',
