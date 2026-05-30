@@ -35,8 +35,8 @@ export const caseStudies: Record<string, CaseStudy> = {
 		slug: 'discord-bot',
 		title: 'discord-bot: a hobby bot run like production',
 		summary:
-			'A personal Python Discord bot instrumented end-to-end — every function traced to Tempo, continuously profiled by Pyroscope, metrics scraped into Prometheus and Grafana. A hobby project used to practise the observability discipline I run at work.',
-		role: 'Solo build',
+			'A personal Python Discord bot instrumented end-to-end — every function traced to Tempo, continuously profiled by Pyroscope, metrics scraped into Prometheus, logs shipped to Loki, all rendered in Grafana. A hobby project used to practise the observability discipline I run at work.',
+		role: 'Built with a friend',
 		stack: [
 			'Python',
 			'discord.py',
@@ -45,6 +45,7 @@ export const caseStudies: Record<string, CaseStudy> = {
 			'Tempo',
 			'Pyroscope',
 			'Prometheus',
+			'Loki',
 			'Grafana'
 		],
 		repo: {
