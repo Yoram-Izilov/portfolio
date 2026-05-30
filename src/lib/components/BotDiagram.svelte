@@ -25,14 +25,14 @@
 		// telemetry (green)
 		{ id: 't0', d: 'M230,364 L230,406', dur: 1.4, delay: 2.4, tel: true }, // Postgres → exporter
 		{ id: 'tr', d: 'M364,126 C470,126 520,164 598,164', dur: 2.2, delay: 1.2, tel: true }, // traces → Tempo
-		{ id: 'pr', d: 'M364,140 C470,160 520,332 598,332', dur: 2.4, delay: 1.6, tel: true }, // profiles → Pyroscope
-		{ id: 'lo', d: 'M364,154 C380,154 380,236 396,236', dur: 1.6, delay: 1.8, tel: true }, // bot stdout → promtail
-		{ id: 'po', d: 'M330,325 C372,325 410,290 430,262', dur: 1.6, delay: 2.0, tel: true }, // postgres stdout → promtail
-		{ id: 'pl', d: 'M546,236 C572,236 580,248 598,248', dur: 1.4, delay: 2.2, tel: true }, // promtail → Loki
+		{ id: 'pr', d: 'M364,140 C470,160 520,248 598,248', dur: 2.4, delay: 1.6, tel: true }, // profiles → Pyroscope
+		{ id: 'lo', d: 'M364,154 C380,154 380,276 396,276', dur: 1.6, delay: 1.8, tel: true }, // bot stdout → promtail
+		{ id: 'po', d: 'M330,325 C372,325 405,305 430,302', dur: 1.6, delay: 2.0, tel: true }, // postgres stdout → promtail
+		{ id: 'pl', d: 'M546,276 C572,276 580,332 598,332', dur: 1.4, delay: 2.2, tel: true }, // promtail → Loki
 		{ id: 'me', d: 'M340,432 C470,432 520,416 598,416', dur: 2.2, delay: 3.0, tel: true }, // metrics → Prometheus
 		{ id: 'tg', d: 'M746,164 C774,164 788,266 788,278', dur: 1.8, delay: 3.4, tel: true }, // Tempo → Grafana
-		{ id: 'lg', d: 'M746,248 C774,248 788,278 788,290', dur: 1.6, delay: 4.6, tel: true }, // Loki → Grafana
-		{ id: 'pg', d: 'M746,332 C774,332 788,300 788,290', dur: 1.6, delay: 3.8, tel: true }, // Pyroscope → Grafana
+		{ id: 'lg', d: 'M746,332 C774,332 788,300 788,290', dur: 1.6, delay: 4.6, tel: true }, // Loki → Grafana
+		{ id: 'pg', d: 'M746,248 C774,248 788,278 788,290', dur: 1.6, delay: 3.8, tel: true }, // Pyroscope → Grafana
 		{ id: 'mg', d: 'M746,416 C774,416 788,320 788,302', dur: 1.6, delay: 4.2, tel: true } // Prometheus → Grafana
 	];
 </script>
@@ -72,17 +72,17 @@
 		<path class="edge dashed tel" d="M230,364 L230,406" style="--d: 1.1s" />
 		<!-- bot process emits traces + profiles together, into the stack -->
 		<path class="edge dashed tel" d="M364,126 C470,126 520,164 598,164" style="--d: 0.7s" />
-		<path class="edge dashed tel" d="M364,140 C470,160 520,332 598,332" style="--d: 0.9s" />
+		<path class="edge dashed tel" d="M364,140 C470,160 520,248 598,248" style="--d: 0.9s" />
 		<!-- bot + Postgres log to stdout, scraped by promtail and shipped to Loki -->
-		<path class="edge dashed tel" d="M364,154 C380,154 380,236 396,236" style="--d: 1.0s" />
-		<path class="edge dashed tel" d="M330,325 C372,325 410,290 430,262" style="--d: 1.1s" />
-		<path class="edge dashed tel" d="M546,236 C572,236 580,248 598,248" style="--d: 1.25s" />
+		<path class="edge dashed tel" d="M364,154 C380,154 380,276 396,276" style="--d: 1.0s" />
+		<path class="edge dashed tel" d="M330,325 C372,325 405,305 430,302" style="--d: 1.1s" />
+		<path class="edge dashed tel" d="M546,276 C572,276 580,332 598,332" style="--d: 1.25s" />
 		<!-- exporter metrics scraped by Prometheus -->
 		<path class="edge dashed tel" d="M340,432 C470,432 520,416 598,416" style="--d: 1.5s" />
 		<!-- Grafana reads all four signals -->
 		<path class="edge dashed tel" d="M746,164 C774,164 788,266 788,278" style="--d: 1.6s" />
-		<path class="edge dashed tel" d="M746,248 C774,248 788,278 788,290" style="--d: 2.0s" />
-		<path class="edge dashed tel" d="M746,332 C774,332 788,300 788,290" style="--d: 1.8s" />
+		<path class="edge dashed tel" d="M746,248 C774,248 788,278 788,290" style="--d: 1.8s" />
+		<path class="edge dashed tel" d="M746,332 C774,332 788,300 788,290" style="--d: 2.0s" />
 		<path class="edge dashed tel" d="M746,416 C774,416 788,320 788,302" style="--d: 1.9s" />
 	</g>
 
@@ -139,9 +139,9 @@
 
 	<!-- promtail: scrapes the containers' stdout logs and ships them to Loki -->
 	<g class="node sidecar" style="--d: 1.15s">
-		<rect x="396" y="210" width="150" height="52" rx="11" />
-		<text class="node-title sm" x="471" y="232">promtail</text>
-		<text class="node-sub" x="471" y="250">log shipper</text>
+		<rect x="396" y="250" width="150" height="52" rx="11" />
+		<text class="node-title sm" x="471" y="272">promtail</text>
+		<text class="node-sub" x="471" y="290">log shipper</text>
 	</g>
 
 	<!-- ===== observability stack (inside the panel) ===== -->
@@ -152,18 +152,18 @@
 		<text class="node-sub" x="672" y="177">traces</text>
 	</g>
 
-	<!-- Loki -->
+	<!-- Pyroscope -->
 	<g class="node obs" style="--d: 0.75s">
 		<rect x="598" y="221" width="148" height="54" rx="11" />
-		<text class="node-title sm" x="672" y="243">Loki</text>
-		<text class="node-sub" x="672" y="261">logs</text>
+		<text class="node-title sm" x="672" y="243">Pyroscope</text>
+		<text class="node-sub" x="672" y="261">profiles</text>
 	</g>
 
-	<!-- Pyroscope -->
+	<!-- Loki -->
 	<g class="node obs" style="--d: 0.95s">
 		<rect x="598" y="305" width="148" height="54" rx="11" />
-		<text class="node-title sm" x="672" y="327">Pyroscope</text>
-		<text class="node-sub" x="672" y="345">profiles</text>
+		<text class="node-title sm" x="672" y="327">Loki</text>
+		<text class="node-sub" x="672" y="345">logs</text>
 	</g>
 
 	<!-- Prometheus -->
