@@ -90,7 +90,7 @@
 
 	<!-- host nginx reverse proxy -->
 	<g class="node nginx" style="--d: 0.35s">
-		<rect x="360" y="106" width="280" height="62" rx="12" />
+		<rect x="340" y="106" width="320" height="62" rx="12" />
 		<text class="node-title" x="500" y="130">host nginx</text>
 		<text class="node-sub" x="500" y="152">reverse proxy · routes by container name</text>
 	</g>
