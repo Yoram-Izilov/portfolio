@@ -53,5 +53,18 @@ export const caseStudies: Record<string, CaseStudy> = {
 			href: 'https://github.com/yoram-izilov/discord-py'
 		},
 		projectId: 'discord'
+	},
+	'building-with-ai': {
+		slug: 'building-with-ai',
+		title: 'building this site: AI with the rails on',
+		summary:
+			'This site was built by Claude Code - but the interesting part is the rails: plan mode before any edit, a team of specialised agents that review each other, and blocking gates that stop broken or generic work from ever landing. Discipline, not vibes.',
+		role: 'Directed the build; own the guardrails',
+		stack: ['Claude Code', 'Subagents', 'Plan mode', 'Hooks', 'GitHub Actions', 'SvelteKit'],
+		repo: {
+			label: 'github.com/yoram-izilov/portfolio',
+			href: 'https://github.com/yoram-izilov/portfolio'
+		},
+		projectId: 'site'
 	}
 };

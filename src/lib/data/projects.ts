@@ -70,11 +70,12 @@ export const projects: Project[] = [
 		points: [
 			'Prerendered to static via SvelteKit adapter-static',
 			'CI gates lint, typecheck and build on every PR',
-			'The concept: the navigation you’re using is the system diagram'
+			'Built by Claude Code on rails: plan mode, a review-each-other agent team, blocking gates'
 		],
 		repo: {
 			label: 'github.com/yoram-izilov/portfolio',
 			href: 'https://github.com/yoram-izilov/portfolio'
-		}
+		},
+		caseStudy: '/work/building-with-ai'
 	}
 ];
